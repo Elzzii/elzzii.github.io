@@ -390,15 +390,15 @@
                             return d[0];
                         })
                         .on("mouseover", function () {
-                          //获得口红的品牌，所属系列，口红id和口红名称
-                          var brand = d3.select("#brand-name");
-                          var series = d3.select("#series-name");
-                          var id = d3.select("#lipstick-id");
-                          var name = d3.select("#lipstick-name");
-                          brand.text(brandsNameList[d3.select(this).attr("brand-id")]);
-                          series.text(seriesNameList[d3.select(this).attr("color-series-id")]);
-                          id.text(d3.select(this).attr("color-id"));
-                          name.text(d3.select(this).attr("color-name"));
+                            //获得口红的品牌，所属系列，口红id和口红名称
+                            var brand = d3.select("#brand-name");
+                            var series = d3.select("#series-name");
+                            var id = d3.select("#lipstick-id");
+                            var name = d3.select("#lipstick-name");
+                            brand.text(brandsNameList[d3.select(this).attr("brand-id")]);
+                            series.text(seriesNameList[d3.select(this).attr("color-series-id")]);
+                            id.text(d3.select(this).attr("color-id"));
+                            name.text(d3.select(this).attr("color-name"));
 
                             //改变类名称
                             d3.select("#series-colors")
@@ -609,30 +609,30 @@
                                         .style("opacity", 1)
                                 });
 
-                              d3.select("#series-colors")
-                                  .selectAll("div").remove()
-                              d3.select("#series-colors")
-                                  .selectAll("div")
-                                  .data(sData)
-                                  .enter()
-                                  .append("div")
-                                  .attr("class", function (d, i) {
-                                      return i == 0 ? "series-color active" : "series-color"
-                                  })
-                                  .attr("color-series-id", sid)
-                                  .attr("circle-r", function (d) {
-                                      return d[2]
-                                  })
-                                  .attr("color-id", function (d) {
-                                      return d[1]
-                                  })
-                                  .attr("color-name", function (d) {
-                                      return d[3]
-                                  })
-                                  .style("background-color", function (d) {
-                                      return d[0]
-                                  })
-                                  .on("mouseover", function () {
+                            d3.select("#series-colors")
+                                .selectAll("div").remove()
+                            d3.select("#series-colors")
+                                .selectAll("div")
+                                .data(sData)
+                                .enter()
+                                .append("div")
+                                .attr("class", function (d, i) {
+                                    return i == 0 ? "series-color active" : "series-color"
+                                })
+                                .attr("color-series-id", sid)
+                                .attr("circle-r", function (d) {
+                                    return d[2]
+                                })
+                                .attr("color-id", function (d) {
+                                    return d[1]
+                                })
+                                .attr("color-name", function (d) {
+                                    return d[3]
+                                })
+                                .style("background-color", function (d) {
+                                    return d[0]
+                                })
+                                .on("mouseover", function () {
                                     //获得口红的品牌，所属系列，口红id和口红名称
                                     var brand = d3.select("#brand-name");
                                     var series = d3.select("#series-name");
@@ -643,105 +643,105 @@
                                     id.text(d3.select(this).attr("color-id"));
                                     name.text(d3.select(this).attr("color-name"));
 
-                                      //改变类名称
-                                      d3.select("#series-colors")
-                                          .selectAll("div")
-                                          .filter(function (d) {
-                                              return d3.select(this).attr("class") == "series-color active";
-                                          })
-                                          .classed("series-color active", false)
-                                          .classed("series-color", true);
+                                    //改变类名称
+                                    d3.select("#series-colors")
+                                        .selectAll("div")
+                                        .filter(function (d) {
+                                            return d3.select(this).attr("class") == "series-color active";
+                                        })
+                                        .classed("series-color active", false)
+                                        .classed("series-color", true);
 
-                                      d3.select(this)
-                                          .classed("series-color", false)
-                                          .classed("series-color active", true);
-                                      //圆变化
-                                      let sid = d3.select(this).attr("color-series-id");
-                                      let lid = d3.select(this).attr("color-id");
-                                      d3.selectAll("circle")
-                                          .filter(function (d) {
-                                              return d3.select(this).attr("series-id") == sid;
-                                          })
-                                          .each(function (d) {
-                                              if (d3.select(this).attr("lipstick-id") == lid) {
-                                                  d3.select(this)
-                                                      .transition()
-                                                      .duration(1000)
-                                                      .attr("r", 50)
-                                                      .style("opacity", 1);
-                                              }
-                                              else {
-                                                  d3.select(this)
-                                                      .transition()
-                                                      .duration(1000)
-                                                      .attr("r", 40)
-                                                      .style("opacity", 1);
-                                              }
-                                          });
-                                      //tips变化
-                                      d3.selectAll(".tips")
-                                          .filter(function (d) {
-                                              return d3.select(this).attr("series-id") == sid;
-                                          })
-                                          .each(function (d) {
-                                              if (d3.select(this).attr("lipstick-id") == lid) {
-                                                  d3.select(this)
-                                                      .transition()
-                                                      .duration(1000)
-                                                      .attr("dy", 45)
-                                                      .style("font-size", 18)
-                                                      .style("display", "block")
-                                              }
-                                              else {
-                                                  d3.select(this)
-                                                      .transition()
-                                                      .duration(1000)
-                                                      .attr("dy", 35)
-                                                      .style("font-size", 18)
-                                                      .style("display", "block")
-                                              }
-                                          });
-                                  })
-                                  .on("mouseout", function () {
-                                      //recover
-                                      let sid = d3.select(this).attr("color-series-id");
+                                    d3.select(this)
+                                        .classed("series-color", false)
+                                        .classed("series-color active", true);
+                                    //圆变化
+                                    let sid = d3.select(this).attr("color-series-id");
+                                    let lid = d3.select(this).attr("color-id");
+                                    d3.selectAll("circle")
+                                        .filter(function (d) {
+                                            return d3.select(this).attr("series-id") == sid;
+                                        })
+                                        .each(function (d) {
+                                            if (d3.select(this).attr("lipstick-id") == lid) {
+                                                d3.select(this)
+                                                    .transition()
+                                                    .duration(1000)
+                                                    .attr("r", 50)
+                                                    .style("opacity", 1);
+                                            }
+                                            else {
+                                                d3.select(this)
+                                                    .transition()
+                                                    .duration(1000)
+                                                    .attr("r", 40)
+                                                    .style("opacity", 1);
+                                            }
+                                        });
+                                    //tips变化
+                                    d3.selectAll(".tips")
+                                        .filter(function (d) {
+                                            return d3.select(this).attr("series-id") == sid;
+                                        })
+                                        .each(function (d) {
+                                            if (d3.select(this).attr("lipstick-id") == lid) {
+                                                d3.select(this)
+                                                    .transition()
+                                                    .duration(1000)
+                                                    .attr("dy", 45)
+                                                    .style("font-size", 18)
+                                                    .style("display", "block")
+                                            }
+                                            else {
+                                                d3.select(this)
+                                                    .transition()
+                                                    .duration(1000)
+                                                    .attr("dy", 35)
+                                                    .style("font-size", 18)
+                                                    .style("display", "block")
+                                            }
+                                        });
+                                })
+                                .on("mouseout", function () {
+                                    //recover
+                                    let sid = d3.select(this).attr("color-series-id");
 
-                                      d3.selectAll("circle")
-                                          .filter(function (d) {
-                                              return d3.select(this).attr("series-id") == sid;
-                                          })
-                                          .each(function (d) {
-                                              d3.select(this)
-                                                  .transition()
-                                                  .duration(1000)
-                                                  .attr("r", zScale(d3.select(this).attr("circle-r")))
-                                                  .style("opacity", 1);
-                                          });
+                                    d3.selectAll("circle")
+                                        .filter(function (d) {
+                                            return d3.select(this).attr("series-id") == sid;
+                                        })
+                                        .each(function (d) {
+                                            d3.select(this)
+                                                .transition()
+                                                .duration(1000)
+                                                .attr("r", zScale(d3.select(this).attr("circle-r")))
+                                                .style("opacity", 1);
+                                        });
 
-                                      //tips recover
-                                      d3.selectAll(".tips")
-                                          .filter(function (d) {
-                                              return d3.select(this).attr("series-id") == sid;
-                                          })
-                                          .each(function (d) {
-                                              d3.select(this)
-                                                  .transition()
-                                                  .duration(1000)
-                                                  .attr("dy", 25)
-                                                  .style("font-size", 11)
-                                                  .style("display", "none");
-                                          });
-                                  });
+                                    //tips recover
+                                    d3.selectAll(".tips")
+                                        .filter(function (d) {
+                                            return d3.select(this).attr("series-id") == sid;
+                                        })
+                                        .each(function (d) {
+                                            d3.select(this)
+                                                .transition()
+                                                .duration(1000)
+                                                .attr("dy", 25)
+                                                .style("font-size", 11)
+                                                .style("display", "none");
+                                        });
+                                });
 
-                                  //append button
-                                  d3.select(".com-button").remove();
-                                  d3.select("#series-colors")
-                                      .append("button")
-                                      .attr("class", "com-button")
-                                      .text("比较")
-                                      .on("click", function () {
+                            //append button
+                            d3.select(".com-button").remove();
+                            d3.select("#series-colors")
+                                .append("button")
+                                .attr("class", "com-button")
+                                .text("比较")
+                                .on("click", function () {
 
-                                      })
+                                })
                         })
                 })
         };
