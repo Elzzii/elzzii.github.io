@@ -7,8 +7,8 @@
     <style>
         #bg {
             position: fixed;
-            width: 100%;
-            height: 100%;
+            width: 99%;
+            height: 99%;
             pointer-events: none;
         }
 
@@ -22,20 +22,20 @@
 
         #info {
             position: absolute;
-            right: 10px;
+            right: 15px;
             bottom: 10px;
         }
 
         h1 {
             margin: 0%;
             font-size: 22px;
-            color: #fff7fb;
+            color: #ffe6ff;
         }
 
         h2 {
             margin: 0%;
             font-size: 16px;
-            color: #555;
+            color: #ffe6ff;
         }
 
         h3 {
@@ -117,8 +117,8 @@
             var canvas = document.getElementById('bg');
             var item = canvas.getContext('2d');
             style = item.createLinearGradient(0, 0, 1900, 0);
-            style.addColorStop(0, '#ffffff');
-            style.addColorStop(1, '#000000');
+            style.addColorStop(0, '#4f4f4f');
+            style.addColorStop(1, '#bebebe');
             item.fillStyle = style;
             item.fillRect(0, 0, 1900, 150);
         }
@@ -134,7 +134,7 @@
         var padding = { top: 50, right: 50, bottom: 50, left: 400 };
         //读取数据
         queue()
-            .defer(d3.json, "lipstick.json")
+            .defer(d3.json, "./lipstick.json")
             .await(ready)
 
         //存储数据数据，读入数据
@@ -181,7 +181,6 @@
                 n += seriesList[i].length;
                 positionsofb.push(n);
             }
-            console.log(brandDataset);
 
             var hsvdisList = [];
             for (let i = 0; i < hsvcolorList.length; i++) {
@@ -559,6 +558,8 @@
                 })
                 .style("background-color", "#ff00ff")
                 .on("click", function () {
+                  var brand = d3.select("#brand-name");
+                  brand.text(brandsNameList[d3.select(this).attr("brand-id")])
                     d3.select(".series-select")
                         .selectAll("div").remove()
 
@@ -568,6 +569,25 @@
                     for (let i = start; i < positionsofb[num]; i++) {
                         data.push([i, seriesNameList[i]])
                     }
+
+                    d3.selectAll("circle")
+                    .each(function () {
+                        d3.select(this)
+                            .transition()
+                            .duration(1000)
+                            .style("display", "none")
+                            .style("opacity", 0)
+                    })
+                    .filter(function () {
+                        return d3.select(this).attr("brand-id") == num;
+                    })
+                    .each(function () {
+                        d3.select(this)
+                            .transition()
+                            .duration(1000)
+                            .style("display", "block")
+                            .style("opacity", 1)
+                    });
 
                     d3.select(".series-select")
                         .selectAll(".series-of-lipstick")
@@ -733,6 +753,15 @@
                                         });
                                 });
 
+                                //获得口红的品牌，所属系列，口红id和口红名称
+                                var brand = d3.select("#brand-name");
+                                var series = d3.select("#series-name");
+                                var id = d3.select("#lipstick-id");
+                                var name = d3.select("#lipstick-name");
+                                brand.text(brandsNameList[num]);
+                                series.text(seriesNameList[sid]);
+                                id.text(0);
+                                name.text(sData[0][3]);
                             //append button
                             d3.select(".com-button").remove();
                             d3.select("#series-colors")
