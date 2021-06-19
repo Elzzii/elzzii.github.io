@@ -124,6 +124,7 @@
             left: 50px;
             padding: 10px 20px;
         }
+<<<<<<< HEAD
 
         #filter {
             display: block;
@@ -140,6 +141,8 @@
             left: 50px;
             padding-left: 10px; 
         }
+=======
+>>>>>>> ec9a4fa (2 new html and some change)
     </style>
 </head>
 
@@ -171,10 +174,13 @@
         <div class="legend">
             <h4>Value</h4>
         </div>
+<<<<<<< HEAD
         <div class="filter">
             <h4>HSV距离</h4>
         </div>
         <input id="filter" type="text" name="filter" value="20">
+=======
+>>>>>>> ec9a4fa (2 new html and some change)
     </div>
 
     <div id="info">
@@ -686,6 +692,73 @@
 =======
 >>>>>>> 4856ff6 (some new function)
 
+            var xAxis = d3.axisTop(xScale)
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", 'translate(0,' + (height - padding.top - padding.bottom) + ')')
+                .call(xAxis)
+                .append("text")
+                .text("Hue")
+                .attr("fill", "#000")
+                .attr("transform", 'translate(' + (width - padding.left - 10) + ', 0)')
+                .attr("text-anchor", 'middle')
+                .attr("dy", '-1em')
+
+            var yAxis = d3.axisLeft(yScale)
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr('transform', 'translate(50 ,0)')
+                .call(yAxis)
+                .append("text")
+                .text("Saturation")
+                .attr("fill", "#000")
+                .attr("text-anchor", 'middle')
+                .attr("dy", '2em')
+
+            var svg1 = d3.select('.legend')
+                .append('svg')
+                .attr('width', 200)
+                .attr('height', 200)
+                .attr('transform', 'translate(0,0)')
+
+            rDataset = [0, .25, .5, .75, 1];
+            svg1.append('g')
+                .selectAll('circle')
+                .data(rDataset)
+                .enter()
+                .append('circle')
+                .attr('cx', function (d, i) {
+                    return (10 + zScale(d) + i * 35);
+                })
+                .attr('cy', 50)
+                .attr('r', function (d) {
+                    return zScale(d);
+                })
+                .attr('fill', '#000')
+                .style('opacity', 1)
+                .style('stroke', 'white')
+                .style('stroke-width', 2)
+
+            svg1.select('g')
+                .selectAll('.legend-txt')
+                .data(rDataset)
+                .enter()
+                .append('text')
+                .attr("class", "legend-txt")
+                .attr("x", function (d, i) {
+                    return (10 + d + i * 35);
+                })
+                .attr("y", 90)
+                .text(function (d, i) {
+                    return (i / 4);
+                })
+                .style("font-size", 12)
+                .style("fill", "#000")
+                .style("opacity", 1)
+                .style("text-anchor", "middle");
+
             d3.select(".all-select")
                 .append("div")
                 .classed("all", true)
@@ -906,6 +979,7 @@
                                                     .style("opacity", 1);
                                             }
                                         });
+<<<<<<< HEAD
 
                                     d3.selectAll('circle')
                                         .filter(function () {
@@ -934,6 +1008,32 @@
 =======
 
 >>>>>>> 4856ff6 (some new function)
+=======
+
+                                    d3.selectAll('circle')
+                                        .filter(function () {
+                                            return d3.select(this).attr("series-id") == sid &&
+                                            d3.select(this).attr("lipstick-id") == lid;
+                                        })
+                                        .each(function () {
+                                            d3.select(this).raise();
+                                        });
+
+                                    //tips变化
+                                    d3.selectAll(".tips")
+                                        .filter(function () {
+                                            return d3.select(this).attr("lipstick-id") == lid &&
+                                                d3.select(this).attr("series-id") == sid
+                                        })
+                                        .each(function () {
+                                            d3.select(this)
+                                                .raise()
+                                                .transition()
+                                                .duration(400)
+                                                .attr("dy", 35)
+                                                .style("display", "block")
+                                        })
+>>>>>>> ec9a4fa (2 new html and some change)
                                 })
                                 .on("mouseout", function () {
                                     //recover
@@ -953,6 +1053,9 @@
 
                                     //tips recover
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ec9a4fa (2 new html and some change)
                                     d3.selectAll(".tips")
                                         .filter(function () {
                                             return d3.select(this).style("display", "block")
@@ -964,9 +1067,12 @@
                                                 .attr("dy", 25)
                                                 .style("display", "none")
                                         })
+<<<<<<< HEAD
 =======
 
 >>>>>>> 4856ff6 (some new function)
+=======
+>>>>>>> ec9a4fa (2 new html and some change)
                                 });
 
                             //获得口红的品牌，所属系列，口红id和口红名称
