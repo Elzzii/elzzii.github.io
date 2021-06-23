@@ -591,7 +591,7 @@
 
                 })
                 .on("click", function () {
-                    let value0 = d3.select('#filter').attr('value');
+                    let value0 = d3.select('#filter').property('value');
                     let thisColor = d3.select(this).attr("fill")
                     d3.selectAll("circle")
                         .filter(function () {
@@ -599,6 +599,7 @@
                         })
                         .filter(function () {
                             let comColor = d3.select(this).attr("fill")
+                            console.log(value0);
                             return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
                         })
                         .each(function () {
