@@ -125,6 +125,9 @@
             padding: 10px 20px;
         }
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 80d6d28 (some changes)
 
         #filter {
             display: block;
@@ -139,10 +142,15 @@
             position: absolute;
             top: 200px;
             left: 50px;
+<<<<<<< HEAD
             padding-left: 10px; 
         }
 =======
 >>>>>>> ec9a4fa (2 new html and some change)
+=======
+            padding-left: 10px;
+        }
+>>>>>>> 80d6d28 (some changes)
     </style>
 </head>
 
@@ -175,12 +183,18 @@
             <h4>Value</h4>
         </div>
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 80d6d28 (some changes)
         <div class="filter">
             <h4>HSV距离</h4>
         </div>
         <input id="filter" type="text" name="filter" value="20">
+<<<<<<< HEAD
 =======
 >>>>>>> ec9a4fa (2 new html and some change)
+=======
+>>>>>>> 80d6d28 (some changes)
     </div>
 
     <div id="info">
@@ -598,6 +612,7 @@
                 })
                 .on("click", function () {
 <<<<<<< HEAD
+<<<<<<< HEAD
                     let value0 = d3.select('#filter').attr('value');
                     let thisColor = d3.select(this).attr("fill")
                     d3.selectAll("circle")
@@ -608,12 +623,22 @@
                             let comColor = d3.select(this).attr("fill")
                             return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
 =======
+=======
+                    let value0 = d3.select('#filter').attr('value');
+>>>>>>> 80d6d28 (some changes)
                     let thisColor = d3.select(this).attr("fill")
                     d3.selectAll("circle")
                         .filter(function () {
+                            return d3.select(this).attr('class') != 'legend-cc';
+                        })
+                        .filter(function () {
                             let comColor = d3.select(this).attr("fill")
+<<<<<<< HEAD
                             return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > 20
 >>>>>>> 4856ff6 (some new function)
+=======
+                            return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
+>>>>>>> 80d6d28 (some changes)
                         })
                         .each(function () {
                             d3.select(this)
@@ -729,6 +754,7 @@
                 .data(rDataset)
                 .enter()
                 .append('circle')
+                .classed('legend-cc', true)
                 .attr('cx', function (d, i) {
                     return (10 + zScale(d) + i * 35);
                 })
@@ -830,11 +856,17 @@
 
                     d3.selectAll("circle")
 <<<<<<< HEAD
+<<<<<<< HEAD
                         .filter(function () {
                             return d3.select(this).attr('class') != 'legend-cc';
                         })
 =======
 >>>>>>> 4856ff6 (some new function)
+=======
+                        .filter(function () {
+                            return d3.select(this).attr('class') != 'legend-cc';
+                        })
+>>>>>>> 80d6d28 (some changes)
                         .each(function () {
                             d3.select(this)
                                 .transition()
