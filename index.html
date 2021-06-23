@@ -124,10 +124,6 @@
             left: 50px;
             padding: 10px 20px;
         }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 80d6d28 (some changes)
 
         #filter {
             display: block;
@@ -142,19 +138,8 @@
             position: absolute;
             top: 200px;
             left: 50px;
-<<<<<<< HEAD
-<<<<<<< HEAD
-            padding-left: 10px; 
-        }
-=======
->>>>>>> ec9a4fa (2 new html and some change)
-=======
             padding-left: 10px;
-=======
-            padding-left: 10px; 
->>>>>>> fa006e4 (some)
         }
->>>>>>> 80d6d28 (some changes)
     </style>
 </head>
 
@@ -186,19 +171,10 @@
         <div class="legend">
             <h4>Value</h4>
         </div>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 80d6d28 (some changes)
         <div class="filter">
             <h4>HSV距离</h4>
         </div>
         <input id="filter" type="text" name="filter" value="20">
-<<<<<<< HEAD
-=======
->>>>>>> ec9a4fa (2 new html and some change)
-=======
->>>>>>> 80d6d28 (some changes)
     </div>
 
     <div id="info">
@@ -615,8 +591,6 @@
 
                 })
                 .on("click", function () {
-<<<<<<< HEAD
-<<<<<<< HEAD
                     let value0 = d3.select('#filter').attr('value');
                     let thisColor = d3.select(this).attr("fill")
                     d3.selectAll("circle")
@@ -626,30 +600,12 @@
                         .filter(function () {
                             let comColor = d3.select(this).attr("fill")
                             return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
-=======
-=======
-                    let value0 = d3.select('#filter').attr('value');
->>>>>>> 80d6d28 (some changes)
-                    let thisColor = d3.select(this).attr("fill")
-                    d3.selectAll("circle")
-                        .filter(function () {
-                            return d3.select(this).attr('class') != 'legend-cc';
-                        })
-                        .filter(function () {
-                            let comColor = d3.select(this).attr("fill")
-<<<<<<< HEAD
-                            return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > 20
->>>>>>> 4856ff6 (some new function)
-=======
-                            return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
->>>>>>> 80d6d28 (some changes)
                         })
                         .each(function () {
                             d3.select(this)
                                 .style("display", "none")
                         })
                 })
-<<<<<<< HEAD
 
             var xAxis = d3.axisTop(xScale)
 
@@ -859,18 +815,9 @@
                     }
 
                     d3.selectAll("circle")
-<<<<<<< HEAD
-<<<<<<< HEAD
                         .filter(function () {
                             return d3.select(this).attr('class') != 'legend-cc';
                         })
-=======
->>>>>>> 4856ff6 (some new function)
-=======
-                        .filter(function () {
-                            return d3.select(this).attr('class') != 'legend-cc';
-                        })
->>>>>>> 80d6d28 (some changes)
                         .each(function () {
                             d3.select(this)
                                 .transition()
@@ -1015,36 +962,6 @@
                                                     .style("opacity", 1);
                                             }
                                         });
-<<<<<<< HEAD
-
-                                    d3.selectAll('circle')
-                                        .filter(function () {
-                                            return d3.select(this).attr("series-id") == sid &&
-                                            d3.select(this).attr("lipstick-id") == lid;
-                                        })
-                                        .each(function () {
-                                            d3.select(this).raise();
-                                        });
-
-                                    //tips变化
-<<<<<<< HEAD
-                                    d3.selectAll(".tips")
-                                        .filter(function () {
-                                            return d3.select(this).attr("lipstick-id") == lid &&
-                                                d3.select(this).attr("series-id") == sid
-                                        })
-                                        .each(function () {
-                                            d3.select(this)
-                                                .raise()
-                                                .transition()
-                                                .duration(400)
-                                                .attr("dy", 35)
-                                                .style("display", "block")
-                                        })
-=======
-
->>>>>>> 4856ff6 (some new function)
-=======
 
                                     d3.selectAll('circle')
                                         .filter(function () {
@@ -1069,7 +986,6 @@
                                                 .attr("dy", 35)
                                                 .style("display", "block")
                                         })
->>>>>>> ec9a4fa (2 new html and some change)
                                 })
                                 .on("mouseout", function () {
                                     //recover
@@ -1088,10 +1004,6 @@
                                         });
 
                                     //tips recover
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ec9a4fa (2 new html and some change)
                                     d3.selectAll(".tips")
                                         .filter(function () {
                                             return d3.select(this).style("display", "block")
@@ -1103,12 +1015,6 @@
                                                 .attr("dy", 25)
                                                 .style("display", "none")
                                         })
-<<<<<<< HEAD
-=======
-
->>>>>>> 4856ff6 (some new function)
-=======
->>>>>>> ec9a4fa (2 new html and some change)
                                 });
 
                             //获得口红的品牌，所属系列，口红id和口红名称
