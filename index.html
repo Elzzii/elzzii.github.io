@@ -80,6 +80,66 @@
             border: 2px solid white;
             margin-right: 3px;
         }
+
+        #button {
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f4c9cc;
+
+        }
+
+        #button:hover {
+            font-size: 16px;
+            background: #da3033;
+        }
+
+        .com-button {
+            font-size: 14px;
+            padding: 5px;
+            border-radius: 5px;
+            background: #f4c9cc;
+        }
+
+        .com-button:hover {
+            font-size: 16px;
+            background: #da3033;
+        }
+
+        .axis path, .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            font-family: sans-serif;
+            font-size: 11px;
+        }
+
+        .legend {
+            display: block;
+            position: absolute;
+            top: 400px;
+            left: 50px;
+            padding: 10px 20px;
+        }
+
+        #filter {
+            display: block;
+            position: absolute;
+            top: 300px;
+            left: 50px;
+            padding-left: 10px;
+        }
+
+        .filter {
+            display: block;
+            position: absolute;
+            top: 200px;
+            left: 50px;
+            padding-left: 10px; 
+        }
     </style>
 </head>
 
@@ -105,6 +165,16 @@
         <div class="series-select">
 
         </div>
+        <div class="colorseries">
+            <button id="button" type="button" name="button">点击查看色系</button>
+        </div>
+        <div class="legend">
+            <h4>Value</h4>
+        </div>
+        <div class="filter">
+            <h4>HSV距离</h4>
+        </div>
+        <input id="filter" type="text" name="filter" value="20">
     </div>
 
     <div id="info">
@@ -123,6 +193,11 @@
             item.fillRect(0, 0, 1900, 150);
         }
         draw();
+
+        var btn = document.getElementById("button");
+        btn.onclick = function() {
+            window.open("sort.html");
+        }
     </script>
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
@@ -182,11 +257,6 @@
                 positionsofb.push(n);
             }
 
-            var hsvdisList = [];
-            for (let i = 0; i < hsvcolorList.length; i++) {
-                hsvdisList.push(HsvDis(hsvcolorList[i]))
-            }
-
             //散点随机坐标集合
             var dataset = [];
 
@@ -200,7 +270,7 @@
             // x轴比例尺
             var xScale = d3.scaleLinear()
                 .domain([0, 1])
-                .range([padding.left, width - padding.left - padding.right]);
+                .range([50, width - padding.left - padding.right]);
 
 
             //y轴比例尺
@@ -267,6 +337,7 @@
                     return colorList[i];
                 })
                 .style("opacity", 1)
+                .style("display", "block")
                 .attr("lipstick-id", function (d, i) {
                     return idList[i];
                 })
@@ -322,42 +393,33 @@
                                 d3.select(this)
                                     .transition()
                                     .duration(1000)
-                                    .attr("r", 50)
+                                    .attr("r", 30)
                                     .style("opacity", 1);
                             }
                             else {
                                 d3.select(this)
                                     .transition()
                                     .duration(1000)
-                                    .attr("r", 40)
+                                    .attr("r", 25)
                                     .style("opacity", 1);
                             }
                         });
+                    d3.select(this).raise();
 
                     //tips变化
                     d3.selectAll(".tips")
                         .filter(function () {
-                            return d3.select(this).attr("series-id") == sid;
+                            return d3.select(this).attr("lipstick-id") == lid &&
+                                d3.select(this).attr("series-id") == sid
                         })
                         .each(function () {
-                            d3.select(this).raise();
-                            if (d3.select(this).attr("lipstick-id") == lid) {
-                                d3.select(this)
-                                    .transition()
-                                    .duration(1000)
-                                    .attr("dy", 45)
-                                    .style("font-size", 18)
-                                    .style("display", "block")
-                            }
-                            else {
-                                d3.select(this)
-                                    .transition()
-                                    .duration(1000)
-                                    .attr("dy", 35)
-                                    .style("font-size", 18)
-                                    .style("display", "block")
-                            }
-                        });
+                            d3.select(this)
+                                .raise()
+                                .transition()
+                                .duration(400)
+                                .attr("dy", 35)
+                                .style("display", "block")
+                        })
 
                     //添加系列颜色展示 先remove 再添加
                     d3.select("#series-colors")
@@ -415,48 +477,49 @@
                             let sid = d3.select(this).attr("color-series-id");
                             let lid = d3.select(this).attr("color-id");
                             d3.selectAll("circle")
-                                .filter(function (d) {
+                                .filter(function () {
                                     return d3.select(this).attr("series-id") == sid;
                                 })
-                                .each(function (d) {
+                                .each(function () {
                                     if (d3.select(this).attr("lipstick-id") == lid) {
                                         d3.select(this)
                                             .transition()
                                             .duration(1000)
-                                            .attr("r", 50)
+                                            .attr("r", 30)
                                             .style("opacity", 1);
                                     }
                                     else {
                                         d3.select(this)
                                             .transition()
                                             .duration(1000)
-                                            .attr("r", 40)
+                                            .attr("r", 25)
                                             .style("opacity", 1);
                                     }
                                 });
+
+                            d3.selectAll('circle')
+                                .filter(function () {
+                                    return d3.select(this).attr("series-id") == sid &&
+                                    d3.select(this).attr("lipstick-id") == lid;
+                                })
+                                .each(function () {
+                                    d3.select(this).raise();
+                                });
+
                             //tips变化
                             d3.selectAll(".tips")
-                                .filter(function (d) {
-                                    return d3.select(this).attr("series-id") == sid;
+                                .filter(function () {
+                                    return d3.select(this).attr("lipstick-id") == lid &&
+                                        d3.select(this).attr("series-id") == sid
                                 })
-                                .each(function (d) {
-                                    if (d3.select(this).attr("lipstick-id") == lid) {
-                                        d3.select(this)
-                                            .transition()
-                                            .duration(1000)
-                                            .attr("dy", 45)
-                                            .style("font-size", 18)
-                                            .style("display", "block")
-                                    }
-                                    else {
-                                        d3.select(this)
-                                            .transition()
-                                            .duration(1000)
-                                            .attr("dy", 35)
-                                            .style("font-size", 18)
-                                            .style("display", "block")
-                                    }
-                                });
+                                .each(function () {
+                                    d3.select(this)
+                                        .raise()
+                                        .transition()
+                                        .duration(400)
+                                        .attr("dy", 35)
+                                        .style("display", "block")
+                                })
                         })
                         .on("mouseout", function () {
                             //recover
@@ -476,17 +539,16 @@
 
                             //tips recover
                             d3.selectAll(".tips")
-                                .filter(function (d) {
-                                    return d3.select(this).attr("series-id") == sid;
+                                .filter(function () {
+                                    return d3.select(this).style("display", "block")
                                 })
-                                .each(function (d) {
+                                .each(function () {
                                     d3.select(this)
                                         .transition()
-                                        .duration(1000)
+                                        .duration(400)
                                         .attr("dy", 25)
-                                        .style("font-size", 11)
-                                        .style("display", "none");
-                                });
+                                        .style("display", "none")
+                                })
                         });
 
                     //append button
@@ -496,7 +558,7 @@
                         .attr("class", "com-button")
                         .text("比较")
                         .on("click", function () {
-
+                            window.open("compare.html");
                         })
                 })
                 .on("mouseout", function () {
@@ -516,23 +578,121 @@
 
                     //tips recover
                     d3.selectAll(".tips")
-                        .filter(function (d) {
-                            return d3.select(this).attr("series-id") == sid;
+                        .filter(function () {
+                            return d3.select(this).style("display", "block")
                         })
-                        .each(function (d) {
+                        .each(function () {
                             d3.select(this)
                                 .transition()
-                                .duration(1000)
+                                .duration(400)
                                 .attr("dy", 25)
-                                .style("font-size", 11)
-                                .style("display", "none");
-                        });
-                });
+                                .style("display", "none")
+                        })
+
+                })
+                .on("click", function () {
+                    let value0 = d3.select('#filter').attr('value');
+                    let thisColor = d3.select(this).attr("fill")
+                    d3.selectAll("circle")
+                        .filter(function () {
+                            return d3.select(this).attr('class') != 'legend-cc';
+                        })
+                        .filter(function () {
+                            let comColor = d3.select(this).attr("fill")
+                            return d3.select(this).style("display") == "block" && HsvDis(rgbToHsv(thisColor), rgbToHsv(comColor)) > value0
+                        })
+                        .each(function () {
+                            d3.select(this)
+                                .style("display", "none")
+                        })
+                })
+
+            var xAxis = d3.axisTop(xScale)
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr("transform", 'translate(0,' + (height - padding.top - padding.bottom) + ')')
+                .call(xAxis)
+                .append("text")
+                .text("Hue")
+                .attr("fill", "#000")
+                .attr("transform", 'translate(' + (width - padding.left - 10) + ', 0)')
+                .attr("text-anchor", 'middle')
+                .attr("dy", '-1em')
+
+            var yAxis = d3.axisLeft(yScale)
+
+            svg.append("g")
+                .attr("class", "axis")
+                .attr('transform', 'translate(50 ,0)')
+                .call(yAxis)
+                .append("text")
+                .text("Saturation")
+                .attr("fill", "#000")
+                .attr("text-anchor", 'middle')
+                .attr("dy", '2em')
+
+            var svg1 = d3.select('.legend')
+                .append('svg')
+                .attr('width', 200)
+                .attr('height', 200)
+                .attr('transform', 'translate(0,0)')
+
+            rDataset = [0, .25, .5, .75, 1];
+            svg1.append('g')
+                .selectAll('circle')
+                .data(rDataset)
+                .enter()
+                .append('circle')
+                .classed('legend-cc', true)
+                .attr('cx', function (d, i) {
+                    return (10 + zScale(d) + i * 35);
+                })
+                .attr('cy', 50)
+                .attr('r', function (d) {
+                    return zScale(d);
+                })
+                .attr('fill', '#000')
+                .style('opacity', 1)
+                .style('stroke', 'white')
+                .style('stroke-width', 2)
+
+            svg1.select('g')
+                .selectAll('.legend-txt')
+                .data(rDataset)
+                .enter()
+                .append('text')
+                .attr("class", "legend-txt")
+                .attr("x", function (d, i) {
+                    return (10 + d + i * 35);
+                })
+                .attr("y", 90)
+                .text(function (d, i) {
+                    return (i / 4);
+                })
+                .style("font-size", 12)
+                .style("fill", "#000")
+                .style("opacity", 1)
+                .style("text-anchor", "middle");
 
             d3.select(".all-select")
                 .append("div")
                 .classed("all", true)
                 .style("background-color", "#ffff00")
+                .on("mouseover", function () {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("width", "20px")
+                        .style("height", "20px")
+                })
+                .on("mouseout", function () {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("width", "12px")
+                        .style("height", "12px")
+                })
                 .on("click", function () {
                     d3.selectAll("circle")
                         .each(function () {
@@ -557,9 +717,23 @@
                     return d
                 })
                 .style("background-color", "#ff00ff")
+                .on("mouseover", function () {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("width", "20px")
+                        .style("height", "20px")
+                })
+                .on("mouseout", function () {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .style("width", "12px")
+                        .style("height", "12px")
+                })
                 .on("click", function () {
-                  var brand = d3.select("#brand-name");
-                  brand.text(brandsNameList[d3.select(this).attr("brand-id")])
+                    var brand = d3.select("#brand-name");
+                    brand.text(brandsNameList[d3.select(this).attr("brand-id")])
                     d3.select(".series-select")
                         .selectAll("div").remove()
 
@@ -571,23 +745,26 @@
                     }
 
                     d3.selectAll("circle")
-                    .each(function () {
-                        d3.select(this)
-                            .transition()
-                            .duration(1000)
-                            .style("display", "none")
-                            .style("opacity", 0)
-                    })
-                    .filter(function () {
-                        return d3.select(this).attr("brand-id") == num;
-                    })
-                    .each(function () {
-                        d3.select(this)
-                            .transition()
-                            .duration(1000)
-                            .style("display", "block")
-                            .style("opacity", 1)
-                    });
+                        .filter(function () {
+                            return d3.select(this).attr('class') != 'legend-cc';
+                        })
+                        .each(function () {
+                            d3.select(this)
+                                .transition()
+                                .duration(1000)
+                                .style("display", "none")
+                                .style("opacity", 0)
+                        })
+                        .filter(function () {
+                            return d3.select(this).attr("brand-id") == num;
+                        })
+                        .each(function () {
+                            d3.select(this)
+                                .transition()
+                                .duration(1000)
+                                .style("display", "block")
+                                .style("opacity", 1)
+                        });
 
                     d3.select(".series-select")
                         .selectAll(".series-of-lipstick")
@@ -602,10 +779,27 @@
                             return d[1]
                         })
                         .style("background-color", "#00ffff")
+                        .on("mouseover", function () {
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .style("width", "20px")
+                                .style("height", "20px")
+                        })
+                        .on("mouseout", function () {
+                            d3.select(this)
+                                .transition()
+                                .duration(200)
+                                .style("width", "12px")
+                                .style("height", "12px")
+                        })
                         .on("click", function () {
                             let sid = d3.select(this).attr("series-id")
                             let sData = []
                             circles = d3.selectAll("circle")
+                                .filter(function () {
+                                    return d3.select(this).attr('class') != 'legend-cc';
+                                })
                                 .each(function () {
                                     d3.select(this)
                                         .transition()
@@ -687,40 +881,41 @@
                                                 d3.select(this)
                                                     .transition()
                                                     .duration(1000)
-                                                    .attr("r", 50)
+                                                    .attr("r", 30)
                                                     .style("opacity", 1);
                                             }
                                             else {
                                                 d3.select(this)
                                                     .transition()
                                                     .duration(1000)
-                                                    .attr("r", 40)
+                                                    .attr("r", 25)
                                                     .style("opacity", 1);
                                             }
                                         });
+
+                                    d3.selectAll('circle')
+                                        .filter(function () {
+                                            return d3.select(this).attr("series-id") == sid &&
+                                            d3.select(this).attr("lipstick-id") == lid;
+                                        })
+                                        .each(function () {
+                                            d3.select(this).raise();
+                                        });
+
                                     //tips变化
                                     d3.selectAll(".tips")
-                                        .filter(function (d) {
-                                            return d3.select(this).attr("series-id") == sid;
+                                        .filter(function () {
+                                            return d3.select(this).attr("lipstick-id") == lid &&
+                                                d3.select(this).attr("series-id") == sid
                                         })
-                                        .each(function (d) {
-                                            if (d3.select(this).attr("lipstick-id") == lid) {
-                                                d3.select(this)
-                                                    .transition()
-                                                    .duration(1000)
-                                                    .attr("dy", 45)
-                                                    .style("font-size", 18)
-                                                    .style("display", "block")
-                                            }
-                                            else {
-                                                d3.select(this)
-                                                    .transition()
-                                                    .duration(1000)
-                                                    .attr("dy", 35)
-                                                    .style("font-size", 18)
-                                                    .style("display", "block")
-                                            }
-                                        });
+                                        .each(function () {
+                                            d3.select(this)
+                                                .raise()
+                                                .transition()
+                                                .duration(400)
+                                                .attr("dy", 35)
+                                                .style("display", "block")
+                                        })
                                 })
                                 .on("mouseout", function () {
                                     //recover
@@ -740,28 +935,27 @@
 
                                     //tips recover
                                     d3.selectAll(".tips")
-                                        .filter(function (d) {
-                                            return d3.select(this).attr("series-id") == sid;
+                                        .filter(function () {
+                                            return d3.select(this).style("display", "block")
                                         })
-                                        .each(function (d) {
+                                        .each(function () {
                                             d3.select(this)
                                                 .transition()
-                                                .duration(1000)
+                                                .duration(400)
                                                 .attr("dy", 25)
-                                                .style("font-size", 11)
-                                                .style("display", "none");
-                                        });
+                                                .style("display", "none")
+                                        })
                                 });
 
-                                //获得口红的品牌，所属系列，口红id和口红名称
-                                var brand = d3.select("#brand-name");
-                                var series = d3.select("#series-name");
-                                var id = d3.select("#lipstick-id");
-                                var name = d3.select("#lipstick-name");
-                                brand.text(brandsNameList[num]);
-                                series.text(seriesNameList[sid]);
-                                id.text(0);
-                                name.text(sData[0][3]);
+                            //获得口红的品牌，所属系列，口红id和口红名称
+                            var brand = d3.select("#brand-name");
+                            var series = d3.select("#series-name");
+                            var id = d3.select("#lipstick-id");
+                            var name = d3.select("#lipstick-name");
+                            brand.text(brandsNameList[num]);
+                            series.text(seriesNameList[sid]);
+                            id.text(0);
+                            name.text(sData[0][3]);
                             //append button
                             d3.select(".com-button").remove();
                             d3.select("#series-colors")
@@ -769,14 +963,14 @@
                                 .attr("class", "com-button")
                                 .text("比较")
                                 .on("click", function () {
-
+                                    window.open("compare.html");
                                 })
                         })
                 })
         };
 
         function rgbToHsv(hex) {
-            [R, G, B] = htoi(hex)
+            [R, G, B] = shtoi(hex)
             R /= 255
             G /= 255
             B /= 255
@@ -799,7 +993,7 @@
         }
 
 
-        function htoi(hex) {
+        function shtoi(hex) {
             s1 = hex.slice(1, 3);
             s2 = hex.slice(3, 5);
             s3 = hex.slice(5);
@@ -809,10 +1003,10 @@
             d = s2.toLowerCase().charCodeAt(1);
             e = s3.toLowerCase().charCodeAt(0);
             f = s3.toLowerCase().charCodeAt(1);
-            return [rgbhtoi(a, b), rgbhtoi(c, d), rgbhtoi(e, f)];
+            return [chtoi(a, b), chtoi(c, d), chtoi(e, f)];
         }
 
-        function rgbhtoi(a, b) {
+        function chtoi(a, b) {
             if (a > 47 && a < 58) {
                 a = (a - 48) * 16;
             }
@@ -836,18 +1030,31 @@
             return a;
         }
 
-        function HsvDis(hsv) {
-            h = hsv[0];
-            s = hsv[1];
-            v = hsv[2];
+        function HsvDis(hsv, hsv1) {
+            h0 = hsv[0];
+            s0 = hsv[1];
+            v0 = hsv[2];
+            h1 = hsv1[0];
+            s1 = hsv1[1];
+            v1 = hsv1[2];
+
             R = 100;
             angle = 30;
+
             h = R * Math.cos(angle / 180 * Math.PI);
             r = R * Math.sin(angle / 180 * Math.PI);
-            x = r * v * s * Math.cos(h / 180 * Math.PI);
-            y = r * v * s * Math.sin(h / 180 * Math.PI);
-            z = h * (1 - v);
-            return Math.sqrt(x * x + y * y + z * z);
+            x0 = r * v0 * s0 * Math.cos(h0 / 180 * Math.PI);
+            y0 = r * v0 * s0 * Math.sin(h0 / 180 * Math.PI);
+            z0 = h * (1 - v0);
+
+            x1 = r * v1 * s1 * Math.cos(h1 / 180 * Math.PI);
+            y1 = r * v1 * s1 * Math.sin(h1 / 180 * Math.PI);
+            z1 = h * (1 - v1);
+
+            dx = h0 - h1
+            dy = s0 - s1
+            dz = v0 - v1
+            return Math.sqrt(dx * dx + dy * dy + dz * dz);
         }
     </script>
 </body>

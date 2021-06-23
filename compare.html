@@ -1,0 +1,4243 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色比较</title>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      background-color: #f7f7f7;
+    }
+
+    .cover {
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      border-radius: 50%;
+    }
+
+    .box {
+      display: flex;
+      flex-wrap: wrap;
+      width: 450px;
+      min-height: 100px;
+      margin-top: 100px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    #distinctionFinder {
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+      display: flex;
+      width: 1200px;
+      height: 500px;
+      padding-top: 100px;
+      justify-content: space-around;
+      background-color: #f7f7f7;
+      border-radius: 10px;
+    }
+
+    .showColor {
+      overflow: hidden;
+      border-radius: 10px;
+      margin-top: 90px;
+    }
+
+    .show {
+      float: left;
+      width: 50px;
+      height: 100px;
+      margin-top: 20px;
+    }
+
+    .title {
+      margin-top: 20px;
+      margin-left: 50%;
+      color:#474747;
+    }
+
+    </style>
+</head>
+
+<body>
+    <div class="title">
+        <h2>比较</h2>
+    </div>
+    <div id="distinctionFinder">
+        <!--左侧颜色选择-->
+        <div>
+            <el-cascader v-model="leftValue" :options="brands" :props="props" clearable @change="leftChange"></el-cascader>
+            <div class="box">
+                <div v-for="(item,i) in selectLeftVal.lipsticks" :key="i">
+                    <el-tooltip effect="dark" :content="item.name" :enterable="false" placement="top">
+                        <div class="cover" :style="{backgroundColor:item.color}" @click.stop="leftClick(item)" :val="item.color"></div>
+                    </el-tooltip>
+                </div>
+            </div>
+        </div>
+        <!--颜色对比-->
+        <div class="showColor">
+            <div class="show" :style="{backgroundColor:leftColor}"></div>
+            <div class="show" :style="{backgroundColor:rightColor}"></div>
+        </div>
+        <!--右侧颜色选择-->
+        <div>
+            <el-cascader v-model="rightValue" :options="brands" :props="props" clearable @change="rightChange"></el-cascader>
+            <div class="box">
+                <div v-for="(item,i) in seRightLeftVal.lipsticks" :key="i">
+                    <el-tooltip class="item" effect="dark" :content="item.name" :enterable="false" placement="top">
+                        <div class="cover" :style="{backgroundColor:item.color}" @click.stop="rightClick(item)"></div>
+                    </el-tooltip>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=" https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+    new Vue({
+      el: '#distinctionFinder',
+      data() {
+        return {
+          leftValue: [],
+          rightValue: [],
+          props: {
+            expandTrigger: 'hover',
+            value: 'name',
+            children: 'series',
+            label: 'name'
+          },
+          brands: [
+            {
+              "name": "迪奥",
+              "series": [
+                {
+                  "name": "全新 迪奥烈艳蓝金唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#cf313f",
+                      "name": "028 摩纳哥之吻",
+                      "id": 0
+                    },
+                    {
+                      "color": "#77144a",
+                      "name": "792 Lady Dior",
+                      "id": 1
+                    },
+                    {
+                      "color": "#992d2d",
+                      "name": "860 东京",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ac554c",
+                      "name": " 100 裸色风尚",
+                      "id": 3
+                    },
+                    {
+                      "color": "#b3645f",
+                      "name": "505 感性",
+                      "id": 4
+                    },
+                    {
+                      "color": "#a74d44",
+                      "name": "434 漫步",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d12227",
+                      "name": "562 宝贝",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b00815",
+                      "name": "999 丝绒",
+                      "id": 7
+                    },
+                    {
+                      "color": "#d15936",
+                      "name": "634 橘园",
+                      "id": 8
+                    },
+                    {
+                      "color": "#a21424",
+                      "name": "999 哑光",
+                      "id": 9
+                    },
+                    {
+                      "color": "#cc1c0f",
+                      "name": "844 特拉法尔加",
+                      "id": 10
+                    },
+                    {
+                      "color": "#ba494f",
+                      "name": "720 偶像",
+                      "id": 11
+                    },
+                    {
+                      "color": "#863321",
+                      "name": "840 光芒",
+                      "id": 12
+                    },
+                    {
+                      "color": "#9b2b1f",
+                      "name": " 646 机遇",
+                      "id": 13
+                    },
+                    {
+                      "color": "#b41e1f",
+                      "name": "888 先锋",
+                      "id": 14
+                    },
+                    {
+                      "color": "#97352c",
+                      "name": "849 银幕",
+                      "id": 15
+                    },
+                    {
+                      "color": "#c74f4e",
+                      "name": "458 巴黎",
+                      "id": 16
+                    },
+                    {
+                      "color": "#da3033",
+                      "name": "453 爱慕",
+                      "id": 17
+                    },
+                    {
+                      "color": "#b44d50",
+                      "name": "772 优雅",
+                      "id": 18
+                    },
+                    {
+                      "color": "#ba5239",
+                      "name": "814 迪奥工坊",
+                      "id": 19
+                    },
+                    {
+                      "color": "#ed7855",
+                      "name": "348 柔曼芍药",
+                      "id": 20
+                    },
+                    {
+                      "color": "#c1060f",
+                      "name": "999 鎏金",
+                      "id": 21
+                    },
+                    {
+                      "color": "#7e1b20",
+                      "name": "666 魔女",
+                      "id": 22
+                    },
+                    {
+                      "color": "#832c25",
+                      "name": "869 精致",
+                      "id": 23
+                    },
+                    {
+                      "color": "#991e30",
+                      "name": "878 胜利",
+                      "id": 24
+                    },
+                    {
+                      "color": "#b8202d",
+                      "name": "999 缎光",
+                      "id": 25
+                    },
+                    {
+                      "color": "#c50e2c",
+                      "name": "762 Dioramour",
+                      "id": 26
+                    },
+                    {
+                      "color": "#b23f44",
+                      "name": "525 甜心",
+                      "id": 27
+                    },
+                    {
+                      "color": "#cd2524",
+                      "name": "080 微笑正红",
+                      "id": 28
+                    },
+                    {
+                      "color": "#a91b1a",
+                      "name": " 760 挚爱",
+                      "id": 29
+                    },
+                    {
+                      "color": "#c4314e",
+                      "name": "766 玫瑰竖琴",
+                      "id": 30
+                    },
+                    {
+                      "color": "#ff4c24",
+                      "name": "643 焦点",
+                      "id": 31
+                    },
+                    {
+                      "color": "#ff4c24",
+                      "name": "520 Feel Good",
+                      "id": 32
+                    },
+                    {
+                      "color": "#e3847e",
+                      "name": "241 轻舞樱花",
+                      "id": 33
+                    },
+                    {
+                      "color": "#9f5451",
+                      "name": "724 温柔",
+                      "id": 34
+                    },
+                    {
+                      "color": "#9c2c20",
+                      "name": "846 协奏",
+                      "id": 35
+                    },
+                    {
+                      "color": "#bd1f2e",
+                      "name": " 773 快乐",
+                      "id": 36
+                    }
+                  ]
+                },
+                {
+                  "name": "全新 迪奥烈艳蓝金唇膏 替换芯",
+                  "price": "￥280",
+                  "lipsticks": [
+                    {
+                      "color": "#ba494f",
+                      "name": "720 偶像",
+                      "id": 0
+                    },
+                    {
+                      "color": "#e14c24",
+                      "name": "643 焦点",
+                      "id": 1
+                    },
+                    {
+                      "color": "#863321",
+                      "name": "840 光芒",
+                      "id": 2
+                    },
+                    {
+                      "color": "#c4314e",
+                      "name": "766 玫瑰竖琴",
+                      "id": 3
+                    },
+                    {
+                      "color": "#da3144",
+                      "name": "520 Feel Good satin finish",
+                      "id": 4
+                    },
+                    {
+                      "color": "#cd2524",
+                      "name": "080 微笑正红",
+                      "id": 5
+                    },
+                    {
+                      "color": "#9f5451",
+                      "name": "724 温柔",
+                      "id": 6
+                    },
+                    {
+                      "color": "#991e30",
+                      "name": "999 缎光",
+                      "id": 7
+                    },
+                    {
+                      "color": "#b8202d",
+                      "name": "878 胜利",
+                      "id": 8
+                    },
+                    {
+                      "color": "#9c2c20",
+                      "name": "846 协奏",
+                      "id": 9
+                    },
+                    {
+                      "color": "#992d2d",
+                      "name": "860 东京",
+                      "id": 10
+                    },
+                    {
+                      "color": "#77144a",
+                      "name": "792 Lady Dior metallic finish",
+                      "id": 11
+                    },
+                    {
+                      "color": "#7e1b20",
+                      "name": "666 魔女",
+                      "id": 12
+                    },
+                    {
+                      "color": "#d12227",
+                      "name": "562 Diorling metallic finish",
+                      "id": 13
+                    },
+                    {
+                      "color": "#b00815",
+                      "name": "999 丝绒",
+                      "id": 14
+                    },
+                    {
+                      "color": "#b44d50",
+                      "name": "772 优雅",
+                      "id": 15
+                    },
+                    {
+                      "color": "#832c25",
+                      "name": "869 精致",
+                      "id": 16
+                    },
+                    {
+                      "color": "#ba5239",
+                      "name": "814 迪奥工坊",
+                      "id": 17
+                    },
+                    {
+                      "color": "#a91b1a",
+                      "name": "760 挚爱",
+                      "id": 18
+                    },
+                    {
+                      "color": "#b41e1f",
+                      "name": "888 先锋",
+                      "id": 19
+                    },
+                    {
+                      "color": "#9b2b1f",
+                      "name": "646 机遇",
+                      "id": 20
+                    },
+                    {
+                      "color": "#bd1f2e",
+                      "name": "773 快乐",
+                      "id": 21
+                    },
+                    {
+                      "color": "#c74f4e",
+                      "name": "458 巴黎",
+                      "id": 22
+                    },
+                    {
+                      "color": "#da3033",
+                      "name": "453 爱慕",
+                      "id": 23
+                    },
+                    {
+                      "color": "#97352c",
+                      "name": "999 哑光",
+                      "id": 24
+                    },
+                    {
+                      "color": "#a21424",
+                      "name": "849 银幕",
+                      "id": 25
+                    },
+                    {
+                      "color": "#d15936",
+                      "name": "634 橘园",
+                      "id": 26
+                    },
+                    {
+                      "color": "#cc1c0f",
+                      "name": "844 特拉法尔加",
+                      "id": 27
+                    },
+                    {
+                      "color": "#cf313f",
+                      "name": "028 摩纳哥之吻",
+                      "id": 28
+                    },
+                    {
+                      "color": "#ac554c",
+                      "name": " 100 裸色风尚",
+                      "id": 29
+                    },
+                    {
+                      "color": "#b3645f",
+                      "name": "505 感性",
+                      "id": 30
+                    },
+                    {
+                      "color": "#a74d44",
+                      "name": "434 漫步",
+                      "id": 31
+                    },
+                    {
+                      "color": "#c50e2c",
+                      "name": "762 Dioramour metallic finish",
+                      "id": 32
+                    },
+                    {
+                      "color": "#b23f44",
+                      "name": " 525 甜心",
+                      "id": 33
+                    },
+                    {
+                      "color": "#c1060f",
+                      "name": "999 鎏金",
+                      "id": 34
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金锁色唇釉",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#b3776f",
+                      "name": "100 裸色风尚",
+                      "id": 0
+                    },
+                    {
+                      "color": "#9b5d52",
+                      "name": "200 逐梦之旅",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ac6a6c",
+                      "name": "458 巴黎印象",
+                      "id": 2
+                    },
+                    {
+                      "color": "#a7585b",
+                      "name": "558 法式优雅",
+                      "id": 3
+                    },
+                    {
+                      "color": "#954637",
+                      "name": "626 名扬四海",
+                      "id": 4
+                    },
+                    {
+                      "color": "#97312d",
+                      "name": "741 迪奥星光",
+                      "id": 5
+                    },
+                    {
+                      "color": "#a81a32",
+                      "name": "760 艳惊四座 ",
+                      "id": 6
+                    },
+                    {
+                      "color": "#874642",
+                      "name": "820 别具一格",
+                      "id": 7
+                    },
+                    {
+                      "color": "#7a323e",
+                      "name": "959 无所畏惧",
+                      "id": 8
+                    },
+                    {
+                      "color": "#a61a19",
+                      "name": "999 传奇红唇",
+                      "id": 9
+                    }
+                  ]
+                },
+                {
+                  "name": "全新DIOR迪奥烈艳蓝金挚红唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#d75351",
+                      "name": "450 Ultra lively",
+                      "id": 0
+                    },
+                    {
+                      "color": "#c25058",
+                      "name": "485 Ultra lust",
+                      "id": 1
+                    },
+                    {
+                      "color": "#e54453",
+                      "name": "555 Ultra kiss",
+                      "id": 2
+                    },
+                    {
+                      "color": "#e04320",
+                      "name": "545 Ultra mad",
+                      "id": 3
+                    },
+                    {
+                      "color": "#d80d09",
+                      "name": "777 Ultra star",
+                      "id": 4
+                    },
+                    {
+                      "color": "#dd1c37",
+                      "name": "651 Ultra fire",
+                      "id": 5
+                    },
+                    {
+                      "color": "#e1143d",
+                      "name": "770 Ultra love",
+                      "id": 6
+                    },
+                    {
+                      "color": "#e01849",
+                      "name": "660 Ultra atomic",
+                      "id": 7
+                    },
+                    {
+                      "color": "#c7143c",
+                      "name": "763",
+                      "id": 8
+                    },
+                    {
+                      "color": "#bd0a0e",
+                      "name": "999 Ultra dior",
+                      "id": 9
+                    },
+                    {
+                      "color": "#b71f14",
+                      "name": "436 Ultra trouble",
+                      "id": 10
+                    },
+                    {
+                      "color": "#ab1725",
+                      "name": "863",
+                      "id": 11
+                    },
+                    {
+                      "color": "#a52a25",
+                      "name": "641",
+                      "id": 12
+                    },
+                    {
+                      "color": "#9d2929",
+                      "name": "851 Ultra shock",
+                      "id": 13
+                    },
+                    {
+                      "color": "#9c4848",
+                      "name": "325 Ultra tender",
+                      "id": 14
+                    },
+                    {
+                      "color": "#99434c",
+                      "name": "587 Ultra appeal",
+                      "id": 15
+                    },
+                    {
+                      "color": "#b11c70",
+                      "name": "755 Ultra daring",
+                      "id": 16
+                    },
+                    {
+                      "color": "#9e1b4d",
+                      "name": "870 Ultra pulse",
+                      "id": 17
+                    },
+                    {
+                      "color": "#82252d",
+                      "name": "843",
+                      "id": 18
+                    },
+                    {
+                      "color": "#631a21",
+                      "name": "883 Ultra poison",
+                      "id": 19
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金红管花芯唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#dc624a",
+                      "name": "168 娇柔",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d96558",
+                      "name": "455 纯真",
+                      "id": 1
+                    },
+                    {
+                      "color": "#cd6f6d",
+                      "name": "480 温柔",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ba2426",
+                      "name": "635 欣喜",
+                      "id": 3
+                    },
+                    {
+                      "color": "#d0462a",
+                      "name": "707 极乐",
+                      "id": 4
+                    },
+                    {
+                      "color": "#e93e37",
+                      "name": "749 欢悦",
+                      "id": 5
+                    },
+                    {
+                      "color": "#cb3f4a",
+                      "name": "750 绽放",
+                      "id": 6
+                    },
+                    {
+                      "color": "#d0554e",
+                      "name": "808 爱抚",
+                      "id": 7
+                    },
+                    {
+                      "color": "#854949",
+                      "name": "829 禁忌",
+                      "id": 8
+                    },
+                    {
+                      "color": "#a54b4a",
+                      "name": "848 耳语",
+                      "id": 9
+                    },
+                    {
+                      "color": "#d01739",
+                      "name": "866 浪漫",
+                      "id": 10
+                    },
+                    {
+                      "color": "#ba1945",
+                      "name": "880 妩媚",
+                      "id": 11
+                    },
+                    {
+                      "color": "#b1263b",
+                      "name": "966 欲望",
+                      "id": 12
+                    },
+                    {
+                      "color": "#832740",
+                      "name": "989 痴迷",
+                      "id": 13
+                    },
+                    {
+                      "color": "#ca1119",
+                      "name": "999 盛放",
+                      "id": 14
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金红管液唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#dc5444",
+                      "name": "539 娇柔",
+                      "id": 0
+                    },
+                    {
+                      "color": "#e56773",
+                      "name": "559 心动",
+                      "id": 1
+                    },
+                    {
+                      "color": "#b53630",
+                      "name": "635 欣喜",
+                      "id": 2
+                    },
+                    {
+                      "color": "#cd5658",
+                      "name": "655 美梦",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c33a06",
+                      "name": "707 极乐",
+                      "id": 4
+                    },
+                    {
+                      "color": "#d0391e",
+                      "name": "749 欢悦",
+                      "id": 5
+                    },
+                    {
+                      "color": "#a44b51",
+                      "name": "786 瑰丽",
+                      "id": 6
+                    },
+                    {
+                      "color": "#bf5c56",
+                      "name": "808 爱抚",
+                      "id": 7
+                    },
+                    {
+                      "color": "#a2171c",
+                      "name": "860 挑逗",
+                      "id": 8
+                    },
+                    {
+                      "color": "#901f1b",
+                      "name": "866 浪漫",
+                      "id": 9
+                    },
+                    {
+                      "color": "#7f171e",
+                      "name": "966 欲望",
+                      "id": 10
+                    },
+                    {
+                      "color": "#802127",
+                      "name": "975 伊甸",
+                      "id": 11
+                    },
+                    {
+                      "color": "#7b2434",
+                      "name": "989 痴迷",
+                      "id": 12
+                    },
+                    {
+                      "color": "#ca0308",
+                      "name": "999 盛放",
+                      "id": 13
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金唇膏 母亲节限量版",
+                  "price": "￥370",
+                  "lipsticks": [
+                    {
+                      "color": "#c86466",
+                      "name": "458 巴黎",
+                      "id": 0
+                    },
+                    {
+                      "color": "#c93e43",
+                      "name": " 525 甜心",
+                      "id": 1
+                    },
+                    {
+                      "color": "#d37873",
+                      "name": " 100 裸色风尚",
+                      "id": 2
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金挚红唇膏  限量版",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#e76100",
+                      "name": "533 Ultra Rush",
+                      "id": 0
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金蜡笔唇膏 沙丘限量版",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#ce4324",
+                      "name": "734 旅行",
+                      "id": 0
+                    },
+                    {
+                      "color": "#ba3b34",
+                      "name": "748 暮色",
+                      "id": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "烈艳蓝金唇膏 星光限量版",
+                  "price": "￥385",
+                  "lipsticks": [
+                    {
+                      "color": "#923c3d",
+                      "name": "558 法式优雅",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a22a29",
+                      "name": "668 艳惊四座",
+                      "id": 1
+                    },
+                    {
+                      "color": "#be211a",
+                      "name": "999 传奇红唇",
+                      "id": 2
+                    },
+                    {
+                      "color": "#7b2e1c",
+                      "name": "626 名扬四海",
+                      "id": 3
+                    }
+                  ]
+                },
+                {
+                  "name": "迪奥魅惑星钻唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#aa5956",
+                      "name": "620 自信星",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b63b36",
+                      "name": "740 快乐星",
+                      "id": 1
+                    },
+                    {
+                      "color": "#b52c22",
+                      "name": "847 热情星",
+                      "id": 2
+                    },
+                    {
+                      "color": "#be0f20",
+                      "name": "765 真爱星",
+                      "id": 3
+                    },
+                    {
+                      "color": "#df3d3b",
+                      "name": "744 财富星",
+                      "id": 4
+                    },
+                    {
+                      "color": "#db383b",
+                      "name": "673 魅力星",
+                      "id": 5
+                    },
+                    {
+                      "color": "#ea5247",
+                      "name": "669 大明星",
+                      "id": 6
+                    },
+                    {
+                      "color": "#d5414f",
+                      "name": " 536 幸运星",
+                      "id": 7
+                    },
+                    {
+                      "color": "#d4374c",
+                      "name": "752 甜「星」",
+                      "id": 8
+                    },
+                    {
+                      "color": "#c63949",
+                      "name": "645 启明星",
+                      "id": 9
+                    },
+                    {
+                      "color": "#c54d59",
+                      "name": "667 时髦星",
+                      "id": 10
+                    },
+                    {
+                      "color": "#e66987",
+                      "name": "482 梦想星",
+                      "id": 11
+                    },
+                    {
+                      "color": "#e03e56",
+                      "name": "578 心动星",
+                      "id": 12
+                    },
+                    {
+                      "color": "#cb2148",
+                      "name": "976 迪奥星",
+                      "id": 13
+                    },
+                    {
+                      "color": "#ab3b53",
+                      "name": "892 勇敢星",
+                      "id": 14
+                    }
+                  ]
+                },
+                {
+                  "name": "迪奥魅惑星耀唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#9d0f01",
+                      "name": "847 WESTWOOD",
+                      "id": 0
+                    },
+                    {
+                      "color": "#da292f",
+                      "name": "744 花蝴蝶",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ab2f0b",
+                      "name": "740 可乐部",
+                      "id": 2
+                    },
+                    {
+                      "color": "#e5615c",
+                      "name": "352 银河",
+                      "id": 3
+                    },
+                    {
+                      "color": "#e52a3d",
+                      "name": "536 耀幸运",
+                      "id": 4
+                    },
+                    {
+                      "color": "#e7354f",
+                      "name": "554 恒星",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d35266",
+                      "name": "571 Starlight",
+                      "id": 6
+                    },
+                    {
+                      "color": "#d73950",
+                      "name": "578 星语",
+                      "id": 7
+                    },
+                    {
+                      "color": "#ce283c",
+                      "name": "579 星愿",
+                      "id": 8
+                    },
+                    {
+                      "color": "#e93d3b",
+                      "name": "639 星河",
+                      "id": 9
+                    },
+                    {
+                      "color": "#d24e42",
+                      "name": "649 星尘",
+                      "id": 10
+                    },
+                    {
+                      "color": "#b54750",
+                      "name": "667 流星",
+                      "id": 11
+                    },
+                    {
+                      "color": "#e84040",
+                      "name": "673 耀迷人",
+                      "id": 12
+                    },
+                    {
+                      "color": "#be1d46",
+                      "name": "759 星光",
+                      "id": 13
+                    },
+                    {
+                      "color": "#9f2f47",
+                      "name": "769 Dior Fortune",
+                      "id": 14
+                    },
+                    {
+                      "color": "#a2151e",
+                      "name": "859 星际",
+                      "id": 15
+                    },
+                    {
+                      "color": "#75182a",
+                      "name": "869 塔罗星",
+                      "id": 16
+                    },
+                    {
+                      "color": "#742947",
+                      "name": "891 耀闪亮",
+                      "id": 17
+                    },
+                    {
+                      "color": "#cb2356",
+                      "name": "976 耀迪奥",
+                      "id": 18
+                    }
+                  ]
+                },
+                {
+                  "name": "迪奥魅惑星耀唇膏  限量版",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#e72d42",
+                      "name": "452 鹭粉色",
+                      "id": 0
+                    },
+                    {
+                      "color": "#cf5878",
+                      "name": "606 瓷粉色",
+                      "id": 1
+                    },
+                    {
+                      "color": "#d24b5c",
+                      "name": "608 甜美粉",
+                      "id": 2
+                    },
+                    {
+                      "color": "#be5059",
+                      "name": "609 粉色人鱼姬",
+                      "id": 3
+                    },
+                    {
+                      "color": "#af2e57",
+                      "name": "871 牡丹粉",
+                      "id": 4
+                    },
+                    {
+                      "color": "#ae2841",
+                      "name": "876 暮色玫瑰",
+                      "id": 5
+                    },
+                    {
+                      "color": "#bf2c73",
+                      "name": "896 电光粉",
+                      "id": 6
+                    },
+                    {
+                      "color": "#9e3458",
+                      "name": "899 暮色粉",
+                      "id": 7
+                    }
+                  ]
+                },
+                {
+                  "name": "Dior迪奥魅惑釉唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#b95e59",
+                      "name": "320 Nude wave",
+                      "id": 0
+                    },
+                    {
+                      "color": "#c06e59",
+                      "name": "323 沙漠",
+                      "id": 1
+                    },
+                    {
+                      "color": "#eb636b",
+                      "name": "457 鸡尾酒",
+                      "id": 2
+                    },
+                    {
+                      "color": "#aa4842",
+                      "name": "524",
+                      "id": 3
+                    },
+                    {
+                      "color": "#e47082",
+                      "name": "550 小心计",
+                      "id": 4
+                    },
+                    {
+                      "color": "#dd5428",
+                      "name": "648 幻境",
+                      "id": 5
+                    },
+                    {
+                      "color": "#902215",
+                      "name": "740 可乐部",
+                      "id": 6
+                    },
+                    {
+                      "color": "#e51e1a",
+                      "name": "744 花蝴蝶",
+                      "id": 7
+                    },
+                    {
+                      "color": "#e53009",
+                      "name": "747 Dior sunset",
+                      "id": 8
+                    },
+                    {
+                      "color": "#b84743",
+                      "name": "748 琥珀",
+                      "id": 9
+                    },
+                    {
+                      "color": "#d21b46",
+                      "name": "764 Dior rodeo",
+                      "id": 10
+                    },
+                    {
+                      "color": "#9e280e",
+                      "name": "847 Westwood",
+                      "id": 11
+                    },
+                    {
+                      "color": "#a01314",
+                      "name": "857 好莱坞大咖",
+                      "id": 12
+                    },
+                    {
+                      "color": "#901a32",
+                      "name": "867 红酒",
+                      "id": 13
+                    },
+                    {
+                      "color": "#c4032b",
+                      "name": "877 给我迪奥",
+                      "id": 14
+                    },
+                    {
+                      "color": "#d5382f",
+                      "name": "879 丝路",
+                      "id": 15
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "香奈儿CHANEL",
+              "series": [
+                {
+                  "name": "ROUGE COCO香奈儿可可小姐唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#f32a18",
+                      "name": "416 - 可可",
+                      "id": 0
+                    },
+                    {
+                      "color": "#e92018",
+                      "name": "440 - 亚瑟",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ea1f32",
+                      "name": "472 - EXPÉRIMENTAL",
+                      "id": 2
+                    },
+                    {
+                      "color": "#b4162f",
+                      "name": "484 -  亲密",
+                      "id": 3
+                    },
+                    {
+                      "color": "#be0622",
+                      "name": "442 - 狄米崔",
+                      "id": 4
+                    },
+                    {
+                      "color": "#bf0616",
+                      "name": "466 - CARMEN",
+                      "id": 5
+                    },
+                    {
+                      "color": "#c40b19",
+                      "name": "444 - 嘉柏丽尔",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ec2d59",
+                      "name": "462 - ROMY",
+                      "id": 7
+                    },
+                    {
+                      "color": "#64000d",
+                      "name": "446 - 艾提安",
+                      "id": 8
+                    },
+                    {
+                      "color": "#cc464f",
+                      "name": "496 - TENDRESSE",
+                      "id": 9
+                    },
+                    {
+                      "color": "#c6484c",
+                      "name": "430 - 玛丽亚 ",
+                      "id": 10
+                    },
+                    {
+                      "color": "#ff5c6d",
+                      "name": "480 -  活力",
+                      "id": 11
+                    },
+                    {
+                      "color": "#fb5c56",
+                      "name": "412 - 德黑兰",
+                      "id": 12
+                    },
+                    {
+                      "color": "#fa466b",
+                      "name": "426 - 露西",
+                      "id": 13
+                    },
+                    {
+                      "color": "#eb2b50",
+                      "name": "482 -  淘气",
+                      "id": 14
+                    },
+                    {
+                      "color": "#f10f71",
+                      "name": "450 - 伊娜",
+                      "id": 15
+                    },
+                    {
+                      "color": "#940324",
+                      "name": "490 - LOVER",
+                      "id": 16
+                    },
+                    {
+                      "color": "#b81236",
+                      "name": "498 - ÉCLAT",
+                      "id": 17
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE LAQUE香奈儿魅力炫光唇釉",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#ab5244",
+                      "name": "62 - STILL",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a04c4c",
+                      "name": "63 - ULTIMATE",
+                      "id": 1
+                    },
+                    {
+                      "color": "#c84e5d",
+                      "name": "64 - EXIGENCE",
+                      "id": 2
+                    },
+                    {
+                      "color": "#d1444c",
+                      "name": "65 - IMPERTURBABLE",
+                      "id": 3
+                    },
+                    {
+                      "color": "#ae3d4f",
+                      "name": "66 - PERMANENT",
+                      "id": 4
+                    },
+                    {
+                      "color": "#de0740",
+                      "name": "69 - RÉMANENCE",
+                      "id": 5
+                    },
+                    {
+                      "color": "#b8023b",
+                      "name": "70 - IMMOBILE",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b31f35",
+                      "name": "71 - MYTHE",
+                      "id": 7
+                    },
+                    {
+                      "color": "#891518",
+                      "name": "72 - ICONIQUE",
+                      "id": 8
+                    },
+                    {
+                      "color": "#ba0322",
+                      "name": "73 - INVINCIBLE",
+                      "id": 9
+                    },
+                    {
+                      "color": "#841118",
+                      "name": "74 - EXPÉRIMENTÉ",
+                      "id": 10
+                    },
+                    {
+                      "color": "#802b24",
+                      "name": "75 - FIDÉLITÉ",
+                      "id": 11
+                    },
+                    {
+                      "color": "#6b0118",
+                      "name": "78 - TENACIOUS",
+                      "id": 12
+                    },
+                    {
+                      "color": "#5a0d1f",
+                      "name": "79 - ÉTERNITÉ",
+                      "id": 13
+                    },
+                    {
+                      "color": "#8e0018",
+                      "name": "80 - TIMELESS",
+                      "id": 14
+                    },
+                    {
+                      "color": "#601a1a",
+                      "name": "81 - OBSTINATION",
+                      "id": 15
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE CAMÉLIA香奈儿山茶花唇膏特别创作 限量珍藏",
+                  "price": "￥360.00",
+                  "lipsticks": [
+                    {
+                      "color": "#bb112e",
+                      "name": "607 -  金属红山茶花",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b53c5b",
+                      "name": "617 - 石榴红山茶花",
+                      "id": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO BLOOM香奈儿可可小姐炫色唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#d76660",
+                      "name": "110 - CHANCE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#c66159",
+                      "name": "112 - OPPORTUNITY",
+                      "id": 1
+                    },
+                    {
+                      "color": "#a74640",
+                      "name": "114 - GLOW",
+                      "id": 2
+                    },
+                    {
+                      "color": "#df7c77",
+                      "name": "116 - DREAM",
+                      "id": 3
+                    },
+                    {
+                      "color": "#b45050",
+                      "name": "118 - RADIANT",
+                      "id": 4
+                    },
+                    {
+                      "color": "#af2839",
+                      "name": "120 - FRESHNESS",
+                      "id": 5
+                    },
+                    {
+                      "color": "#f1575f",
+                      "name": "122 - ZENITH",
+                      "id": 6
+                    },
+                    {
+                      "color": "#e34f5f",
+                      "name": "124 - MERVEILLE",
+                      "id": 7
+                    },
+                    {
+                      "color": "#d31e51",
+                      "name": "126 - SEASON",
+                      "id": 8
+                    },
+                    {
+                      "color": "#d11231",
+                      "name": "128 - MAGIC",
+                      "id": 9
+                    },
+                    {
+                      "color": "#f83f45",
+                      "name": "130 - BLOSSOM",
+                      "id": 10
+                    },
+                    {
+                      "color": "#de454a",
+                      "name": "132 - VIVACITY",
+                      "id": 11
+                    },
+                    {
+                      "color": "#d03135",
+                      "name": "134 - SUNLIGHT",
+                      "id": 12
+                    },
+                    {
+                      "color": "#df2846",
+                      "name": "136 - DESTINY",
+                      "id": 13
+                    },
+                    {
+                      "color": "#c21026",
+                      "name": "138 - VITALITÉ",
+                      "id": 14
+                    },
+                    {
+                      "color": "#be0e25",
+                      "name": "140 - ALIVE",
+                      "id": 15
+                    },
+                    {
+                      "color": "#b4142e",
+                      "name": "142 - BURST",
+                      "id": 16
+                    },
+                    {
+                      "color": "#9f1e30",
+                      "name": "144 - UNEXPECTED",
+                      "id": 17
+                    },
+                    {
+                      "color": "#a0282a",
+                      "name": "146 - BLAST",
+                      "id": 18
+                    },
+                    {
+                      "color": "#860f25",
+                      "name": "148 - SURPRISE",
+                      "id": 19
+                    }
+                  ]
+                },
+                {
+                  "name": "LES BEIGES香奈儿润唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#ff737e",
+                      "name": "LIGHT",
+                      "id": 0
+                    },
+                    {
+                      "color": "#ff6c76",
+                      "name": "WARM",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ff606c",
+                      "name": "MEDIUM",
+                      "id": 2
+                    },
+                    {
+                      "color": "#d04057",
+                      "name": "DEEP",
+                      "id": 3
+                    },
+                    {
+                      "color": "#d24349",
+                      "name": "INTENSE",
+                      "id": 4
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO FLASH香奈儿可可小姐炫光唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#f4a88e",
+                      "name": "52 - CASUAL",
+                      "id": 0
+                    },
+                    {
+                      "color": "#eebbb8",
+                      "name": "154 - DOUCEUR",
+                      "id": 1
+                    },
+                    {
+                      "color": "#e09486",
+                      "name": "116 - EASY",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ed6c71",
+                      "name": "90 - JOUR",
+                      "id": 3
+                    },
+                    {
+                      "color": "#cc4957",
+                      "name": "82 - LIVE",
+                      "id": 4
+                    },
+                    {
+                      "color": "#df184f",
+                      "name": "64 - ARDENT",
+                      "id": 5
+                    },
+                    {
+                      "color": "#fe4542",
+                      "name": "146 - DAZZLE",
+                      "id": 6
+                    },
+                    {
+                      "color": "#e24079",
+                      "name": "142 - CRUSH",
+                      "id": 7
+                    },
+                    {
+                      "color": "#e08e78",
+                      "name": "53 - CHICNESS",
+                      "id": 8
+                    },
+                    {
+                      "color": "#ec736b",
+                      "name": "144 - MOVE",
+                      "id": 9
+                    },
+                    {
+                      "color": "#f33b55",
+                      "name": "78 - EMOTION",
+                      "id": 10
+                    },
+                    {
+                      "color": "#f12a51",
+                      "name": "91 - BOHÈME",
+                      "id": 11
+                    },
+                    {
+                      "color": "#ff5869",
+                      "name": "97 - FERVEUR",
+                      "id": 12
+                    },
+                    {
+                      "color": "#ff3535",
+                      "name": "60 - BEAT",
+                      "id": 13
+                    },
+                    {
+                      "color": "#782535",
+                      "name": "104 - TEMPER",
+                      "id": 14
+                    },
+                    {
+                      "color": "#ff3026",
+                      "name": "62 - FIRE",
+                      "id": 15
+                    },
+                    {
+                      "color": "#fb363d",
+                      "name": "66 - PULSE",
+                      "id": 16
+                    },
+                    {
+                      "color": "#fb375b",
+                      "name": "86 - FURTIVE",
+                      "id": 17
+                    },
+                    {
+                      "color": "#d41052",
+                      "name": "122 - PLAY",
+                      "id": 18
+                    },
+                    {
+                      "color": "#e64148",
+                      "name": "148 - LIVELY",
+                      "id": 19
+                    },
+                    {
+                      "color": "#e21b32",
+                      "name": "68 - ULTIME",
+                      "id": 20
+                    },
+                    {
+                      "color": "#ca222f",
+                      "name": "92 - AMOUR",
+                      "id": 21
+                    },
+                    {
+                      "color": "#c76757",
+                      "name": "56 - MOMENT",
+                      "id": 22
+                    },
+                    {
+                      "color": "#8e1325",
+                      "name": "126 - SWING",
+                      "id": 23
+                    },
+                    {
+                      "color": "#d53036",
+                      "name": "152 - SHAKE",
+                      "id": 24
+                    },
+                    {
+                      "color": "#cd2340",
+                      "name": "98 - INSTINCT",
+                      "id": 25
+                    },
+                    {
+                      "color": "#c82e46",
+                      "name": "156 - DÉLICATESSE",
+                      "id": 26
+                    },
+                    {
+                      "color": "#a4202d",
+                      "name": "70 - ATTITUDE",
+                      "id": 27
+                    },
+                    {
+                      "color": "#8b2b2c",
+                      "name": "106 - DOMINANT",
+                      "id": 28
+                    },
+                    {
+                      "color": "#87283e",
+                      "name": "96 - PHÉNOMÈNE",
+                      "id": 29
+                    },
+                    {
+                      "color": "#7e2c2e",
+                      "name": "102 - NOIR MODERNE",
+                      "id": 30
+                    },
+                    {
+                      "color": "#6e293b",
+                      "name": "128 - MOOD",
+                      "id": 31
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO STYLO香奈儿可可小姐唇膏笔",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#e51026",
+                      "name": "206 - HISTOIRE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a51d1d",
+                      "name": "224 - MÉMOIRE",
+                      "id": 1
+                    },
+                    {
+                      "color": "#c7094f",
+                      "name": "208 - ROMAN",
+                      "id": 2
+                    },
+                    {
+                      "color": "#f28a8b",
+                      "name": "228 - POÉSIE",
+                      "id": 3
+                    },
+                    {
+                      "color": "#f42455",
+                      "name": "226 - CALLIGRAPHIE",
+                      "id": 4
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO SHINE香奈儿可可小姐唇膏水亮系列",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#ff7584",
+                      "name": "142 -  激烈",
+                      "id": 0
+                    },
+                    {
+                      "color": "#ea4556",
+                      "name": "62 - 蒙特卡罗",
+                      "id": 1
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE香奈儿炫亮魅力唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#9a3032",
+                      "name": "192 - PROFONDEUR",
+                      "id": 0
+                    },
+                    {
+                      "color": "#fe4330",
+                      "name": "96 - 古灵精怪",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ff4b34",
+                      "name": "182 - VIBRANTE",
+                      "id": 2
+                    },
+                    {
+                      "color": "#fc213f",
+                      "name": "172 - ROUGE REBELLE",
+                      "id": 3
+                    },
+                    {
+                      "color": "#cf0e1f",
+                      "name": "176 - INDÉPENDANTE",
+                      "id": 4
+                    },
+                    {
+                      "color": "#da1735",
+                      "name": "102 - 悸动",
+                      "id": 5
+                    },
+                    {
+                      "color": "#c1343d",
+                      "name": "135 - 谜情",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b40320",
+                      "name": "99 - 海盗",
+                      "id": 7
+                    },
+                    {
+                      "color": "#b4000e",
+                      "name": "169 - ROUGE TENTATION",
+                      "id": 8
+                    },
+                    {
+                      "color": "#da5d6d",
+                      "name": "91 - 吸引力",
+                      "id": 9
+                    },
+                    {
+                      "color": "#dd3f60",
+                      "name": "158 - VIREVOLTANTE",
+                      "id": 10
+                    },
+                    {
+                      "color": "#da6776",
+                      "name": "178 - NEW PRODIGIOUS",
+                      "id": 11
+                    },
+                    {
+                      "color": "#e02447",
+                      "name": "165 - ÉBLOUISSANTE",
+                      "id": 12
+                    },
+                    {
+                      "color": "#e5545b",
+                      "name": "191 -  ROUGE BRÛLANT",
+                      "id": 13
+                    },
+                    {
+                      "color": "#fe6d74",
+                      "name": "179 - LUMINOUS",
+                      "id": 14
+                    },
+                    {
+                      "color": "#ff3d48",
+                      "name": "152 - 隐约",
+                      "id": 15
+                    },
+                    {
+                      "color": "#ff4052",
+                      "name": "136 - 悠扬",
+                      "id": 16
+                    },
+                    {
+                      "color": "#fd3961",
+                      "name": "138 - 激昂",
+                      "id": 17
+                    },
+                    {
+                      "color": "#fe5995",
+                      "name": "94 - 着迷",
+                      "id": 18
+                    },
+                    {
+                      "color": "#dd4671",
+                      "name": "166 - INDÉMODABLE",
+                      "id": 19
+                    },
+                    {
+                      "color": "#d4144f",
+                      "name": "93 - 兴奋",
+                      "id": 20
+                    },
+                    {
+                      "color": "#ff8675",
+                      "name": "90 - 活泼",
+                      "id": 21
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE VELVET EXTRÊME香奈儿炫亮魅力柔雾唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#d25d63",
+                      "name": "132 - ENDLESS",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b6726f",
+                      "name": "118 - ÉTERNEL",
+                      "id": 1
+                    },
+                    {
+                      "color": "#bd6d6c",
+                      "name": "102 - MODERN",
+                      "id": 2
+                    },
+                    {
+                      "color": "#932d3a",
+                      "name": "130 - ROUGE OBSCUR",
+                      "id": 3
+                    },
+                    {
+                      "color": "#982834",
+                      "name": "116 - EXTRÊME",
+                      "id": 4
+                    },
+                    {
+                      "color": "#ca3451",
+                      "name": "114 - ÉPITOME",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d4293c",
+                      "name": "112 - IDÉAL",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ef3035",
+                      "name": "110 - IMPRESSIVE",
+                      "id": 7
+                    },
+                    {
+                      "color": "#df5360",
+                      "name": "134 - ÉCLOSION",
+                      "id": 8
+                    },
+                    {
+                      "color": "#b8192b",
+                      "name": "136 - PIVOINE NOIRE",
+                      "id": 9
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE VELVET香奈儿炫亮魅力唇膏丝绒系列",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#be6c60",
+                      "name": "62 - LIBRE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#ff4a43",
+                      "name": "64 - FIRST LIGHT",
+                      "id": 1
+                    },
+                    {
+                      "color": "#f33735",
+                      "name": "57 - ROUGE FEU",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ff3d48",
+                      "name": "66 - L'INDOMABILE",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c42f42",
+                      "name": "51 - 震撼",
+                      "id": 4
+                    },
+                    {
+                      "color": "#cc252c",
+                      "name": "56 - ROUGE CHARNEL",
+                      "id": 5
+                    },
+                    {
+                      "color": "#931a21",
+                      "name": "38 - 迷惑",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b64348",
+                      "name": "58 - ROUGE VIE",
+                      "id": 7
+                    },
+                    {
+                      "color": "#ff5754",
+                      "name": "61 - LA SECRÈTE",
+                      "id": 8
+                    },
+                    {
+                      "color": "#fd4a68",
+                      "name": "42 - 显眼",
+                      "id": 9
+                    },
+                    {
+                      "color": "#fc4756",
+                      "name": "43 - 亲爱",
+                      "id": 10
+                    },
+                    {
+                      "color": "#f73766",
+                      "name": "72 - INFRAROSE",
+                      "id": 11
+                    },
+                    {
+                      "color": "#ee304a",
+                      "name": "46 - 慧黠",
+                      "id": 12
+                    },
+                    {
+                      "color": "#e13269",
+                      "name": "37 - 纵情",
+                      "id": 13
+                    },
+                    {
+                      "color": "#f63c9d",
+                      "name": "44 - 歌剧名伶",
+                      "id": 14
+                    },
+                    {
+                      "color": "#a23e48",
+                      "name": "70 - UNIQUE",
+                      "id": 15
+                    },
+                    {
+                      "color": "#c26266",
+                      "name": "69 - ABSTRAIT",
+                      "id": 16
+                    },
+                    {
+                      "color": "#ca7a73",
+                      "name": "68 - ÉMOTIVE",
+                      "id": 17
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE INK FUSION香奈儿炫亮魅力印记唇釉",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#d97573",
+                      "name": "804 - MAUVY NUDE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#de616f",
+                      "name": "806 - PINK BROWN",
+                      "id": 1
+                    },
+                    {
+                      "color": "#fc296e",
+                      "name": "808 - VIBRANT PINK",
+                      "id": 2
+                    },
+                    {
+                      "color": "#b70944",
+                      "name": "824 - BERRY",
+                      "id": 3
+                    },
+                    {
+                      "color": "#e71447",
+                      "name": "812 - ROSE-ROUGE",
+                      "id": 4
+                    },
+                    {
+                      "color": "#e31023",
+                      "name": "816 - FRESH RED",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d70536",
+                      "name": "818 - TRUE RED",
+                      "id": 6
+                    },
+                    {
+                      "color": "#c30135",
+                      "name": "822 - DEEP PINK",
+                      "id": 7
+                    },
+                    {
+                      "color": "#93014c",
+                      "name": "826 - POURPRE",
+                      "id": 8
+                    },
+                    {
+                      "color": "#951220",
+                      "name": "836 - IDYLLIQUE",
+                      "id": 9
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE INK香奈儿炫亮魅力印记唇釉",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#da9e7a",
+                      "name": "202 - METALLIC BEIGE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d18456",
+                      "name": "204 - METALLIC BRONZE",
+                      "id": 1
+                    },
+                    {
+                      "color": "#cc4c3f",
+                      "name": "206 - METALLIC COPPER",
+                      "id": 2
+                    },
+                    {
+                      "color": "#c5263a",
+                      "name": "208 - METALLIC RED",
+                      "id": 3
+                    },
+                    {
+                      "color": "#d51024",
+                      "name": "222 - SIGNATURE",
+                      "id": 4
+                    },
+                    {
+                      "color": "#e8716d",
+                      "name": "140 - 爱慕",
+                      "id": 5
+                    },
+                    {
+                      "color": "#b95e5b",
+                      "name": "224 - HARMONIE",
+                      "id": 6
+                    },
+                    {
+                      "color": "#fe2e3b",
+                      "name": "144 - 活力",
+                      "id": 7
+                    },
+                    {
+                      "color": "#fb352c",
+                      "name": "164 - ENTUSIASTA",
+                      "id": 8
+                    },
+                    {
+                      "color": "#df031f",
+                      "name": "148 - 自由",
+                      "id": 9
+                    },
+                    {
+                      "color": "#f6283c",
+                      "name": "218 - PLAISIR",
+                      "id": 10
+                    },
+                    {
+                      "color": "#bd2035",
+                      "name": "152 - 冲击",
+                      "id": 11
+                    },
+                    {
+                      "color": "#8f0111",
+                      "name": "154 - 经历",
+                      "id": 12
+                    },
+                    {
+                      "color": "#80243b",
+                      "name": "174 - MELANCHOLIA",
+                      "id": 13
+                    },
+                    {
+                      "color": "#cc6b72",
+                      "name": "196 - PRÉCIEUX",
+                      "id": 14
+                    },
+                    {
+                      "color": "#eb1a39",
+                      "name": "146 - 诱惑",
+                      "id": 15
+                    },
+                    {
+                      "color": "#bb002d",
+                      "name": "150 - 充沛",
+                      "id": 16
+                    }
+                  ]
+                },
+                {
+                  "name": "LE ROUGE CRAYON DE COULEUR香奈儿唇膏笔",
+                  "price": "￥320.00",
+                  "lipsticks": [
+                    {
+                      "color": "#cf8c7b",
+                      "name": "N°19 - AU NATUREL",
+                      "id": 0
+                    },
+                    {
+                      "color": "#e14f64",
+                      "name": "N°3 - 粉白玫瑰",
+                      "id": 1
+                    },
+                    {
+                      "color": "#df788b",
+                      "name": "N°13 - 干玫瑰",
+                      "id": 2
+                    },
+                    {
+                      "color": "#dd7479",
+                      "name": "N°2 - 紫罗红",
+                      "id": 3
+                    },
+                    {
+                      "color": "#ef1f8d",
+                      "name": "N°7 - 海棠",
+                      "id": 4
+                    },
+                    {
+                      "color": "#d37569",
+                      "name": "27 - BOIS ROSE",
+                      "id": 5
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE VELVET LE LION DE CHANEL香奈儿狮子唇膏特别创作 限定珍藏",
+                  "price": "￥360.00",
+                  "lipsticks": [
+                    {
+                      "color": "#d17d65",
+                      "name": "227 - BEIGE RUGISSANT",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b65850",
+                      "name": "237 - BEIGE ARDENT",
+                      "id": 1
+                    },
+                    {
+                      "color": "#f84139",
+                      "name": "247 - ROUGE IMPULSIF",
+                      "id": 2
+                    },
+                    {
+                      "color": "#d51932",
+                      "name": "257 - ROUGE TRIOMPHAL",
+                      "id": 3
+                    },
+                    {
+                      "color": "#932331",
+                      "name": "267 - ROUGE AUDACIEUX",
+                      "id": 4
+                    },
+                    {
+                      "color": "#b12a24",
+                      "name": "277 - ROUGE FAUVE",
+                      "id": 5
+                    },
+                    {
+                      "color": "#f63937",
+                      "name": "57 - ROUGE FEU",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ba4649",
+                      "name": "58 - ROUGE VIE",
+                      "id": 7
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE ALLURE香奈儿炫亮魅力唇膏黑金系列限定创作",
+                  "price": "￥360.00",
+                  "lipsticks": [
+                    {
+                      "color": "#d17965",
+                      "name": "107 - OR BEIGE",
+                      "id": 0
+                    },
+                    {
+                      "color": "#9c242e",
+                      "name": "117  - OR CUIVRÉ",
+                      "id": 1
+                    },
+                    {
+                      "color": "#d51d27",
+                      "name": "127 - ROUGE D'OR",
+                      "id": 2
+                    },
+                    {
+                      "color": "#800726",
+                      "name": "137  - POURPRE D'OR",
+                      "id": 3
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO FLASH TOP COAT香奈儿可可小姐炫光唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#fee0bc",
+                      "name": "200 - LIGHT UP",
+                      "id": 0
+                    }
+                  ]
+                },
+                {
+                  "name": "ROUGE COCO BAUME香奈儿可可小姐柔润护唇膏",
+                  "price": "￥340.00",
+                  "lipsticks": [
+                    {
+                      "color": "#000000",
+                      "name": "3G",
+                      "id": 0
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "mac",
+              "series": [
+                {
+                  "name": "魅可丝缎柔雾唇膏",
+                  "price": "￥180",
+                  "lipsticks": [
+                    {
+                      "color": "#af3832",
+                      "name": "316 DEVOTED TO CHILI 柔雾小辣椒",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a2402c",
+                      "name": "925 MARRAKESH-MERE 摩洛哥红棕",
+                      "id": 1
+                    },
+                    {
+                      "color": "#953831",
+                      "name": "926 DUBONNET BUZZ 伯爵红茶",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ba3a39",
+                      "name": "923 STAY CURIOUS糖渍樱花",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c76864",
+                      "name": "314 MULL IT OVER 白桃奶茶色",
+                      "id": 4
+                    },
+                    {
+                      "color": "#b65451",
+                      "name": "930 BRICK THROUGH 转运豆沙",
+                      "id": 5
+                    },
+                    {
+                      "color": "#5c362b",
+                      "name": "927 TURN TO THE LEFT 可可茶棕",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ba0b08",
+                      "name": "922 WERK, WERK, WERK初恋苹果红",
+                      "id": 7
+                    },
+                    {
+                      "color": "#975054",
+                      "name": "932 KINDA SOAR-TA 烟熏玫瑰",
+                      "id": 8
+                    },
+                    {
+                      "color": "#e43d45",
+                      "name": "308 MANDARIN O 初恋西柚色",
+                      "id": 9
+                    },
+                    {
+                      "color": "#b51e3f",
+                      "name": "8306 SHOCKING REVELATION 复古红莓",
+                      "id": 10
+                    },
+                    {
+                      "color": "#cd0c27",
+                      "name": "315 Lasting Passion 糖霜草莓色",
+                      "id": 11
+                    },
+                    {
+                      "color": "#bc554e",
+                      "name": "921 Sultry Move棕糖蜜桃",
+                      "id": 12
+                    },
+                    {
+                      "color": "#e02f05",
+                      "name": "303 Style Shocked! 胡萝卜汁色",
+                      "id": 13
+                    },
+                    {
+                      "color": "#933a50",
+                      "name": "305 Burning Love 梅子浆果色",
+                      "id": 14
+                    },
+                    {
+                      "color": "#ac6259",
+                      "name": "931 Teddy 2.0 陶土奶咖",
+                      "id": 15
+                    },
+                    {
+                      "color": "#da5751",
+                      "name": "928 Sheer Outrage 奶油桃子",
+                      "id": 16
+                    },
+                    {
+                      "color": "#c61314",
+                      "name": "929 You’re Buggin’, Lady 丝绒探戈",
+                      "id": 17
+                    },
+                    {
+                      "color": "#d8716a",
+                      "name": "924 Reverence 牛奶裸咖色",
+                      "id": 18
+                    },
+                    {
+                      "color": "#cd3669",
+                      "name": "920 Velvet Punch 干枯梅子色",
+                      "id": 19
+                    },
+                    {
+                      "color": "#f55f8c",
+                      "name": "917 Sexy, But Sweet 玫瑰奶茶色",
+                      "id": 20
+                    },
+                    {
+                      "color": "#f55f8c",
+                      "name": "917 Sexy, But Sweet 玫瑰奶茶色",
+                      "id": 21
+                    },
+                    {
+                      "color": "#c78797",
+                      "name": "918 Ripened 乌梅灰紫色",
+                      "id": 22
+                    },
+                    {
+                      "color": "#823b5b",
+                      "name": "919 P For Potent 微醺葡萄紫",
+                      "id": 23
+                    },
+                    {
+                      "color": "#eaa181",
+                      "name": "311 My Tweedy 肉桂土橘色",
+                      "id": 24
+                    },
+                    {
+                      "color": "#f78c82",
+                      "name": "313 Scattered Petals 哑光肉粉色",
+                      "id": 25
+                    },
+                    {
+                      "color": "#fb236a",
+                      "name": "307 Fall In Love 丝绒芭比粉",
+                      "id": 26
+                    },
+                    {
+                      "color": "#d87c89",
+                      "name": "304 Sultriness 珊瑚暖粉色",
+                      "id": 27
+                    },
+                    {
+                      "color": "#e8aa93",
+                      "name": "309 Best Of Me 清透米色",
+                      "id": 28
+                    },
+                    {
+                      "color": "#d39387",
+                      "name": " 310 Influentially It 焦糖裸橘色",
+                      "id": 29
+                    },
+                    {
+                      "color": "#cc746a",
+                      "name": "302 Sweet, No Sugar 暖调杏粉色",
+                      "id": 30
+                    },
+                    {
+                      "color": "#b26f54",
+                      "name": "312 Impulsive 巧克力裸棕",
+                      "id": 31
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可柔感哑光唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#702f2b",
+                      "name": "Antique Velvet",
+                      "id": 0
+                    },
+                    {
+                      "color": "#e97ae5",
+                      "name": "Lavender Jade",
+                      "id": 1
+                    },
+                    {
+                      "color": "#f75753",
+                      "name": "Tropic Tonic 珊瑚橘色",
+                      "id": 2
+                    },
+                    {
+                      "color": "#201d4a",
+                      "name": "Matte Royal",
+                      "id": 3
+                    },
+                    {
+                      "color": "#52413e",
+                      "name": "In My Fashion",
+                      "id": 4
+                    },
+                    {
+                      "color": "#835d52",
+                      "name": "Stone",
+                      "id": 5
+                    },
+                    {
+                      "color": "#524d50",
+                      "name": "In The Spirit",
+                      "id": 6
+                    },
+                    {
+                      "color": "#691b1c",
+                      "name": "Sin",
+                      "id": 7
+                    },
+                    {
+                      "color": "#b95c91",
+                      "name": "Men Love Mystery",
+                      "id": 8
+                    },
+                    {
+                      "color": "#74427f",
+                      "name": "Heroine",
+                      "id": 9
+                    },
+                    {
+                      "color": "#fb3a3d",
+                      "name": "Mangrove",
+                      "id": 10
+                    },
+                    {
+                      "color": "#84616a",
+                      "name": "Lightly Charred",
+                      "id": 11
+                    },
+                    {
+                      "color": "#502340",
+                      "name": "Instigator",
+                      "id": 12
+                    },
+                    {
+                      "color": "#af7a61",
+                      "name": "Yash",
+                      "id": 13
+                    },
+                    {
+                      "color": "#f15d73",
+                      "name": "Please Me",
+                      "id": 14
+                    },
+                    {
+                      "color": "#8ad8fe",
+                      "name": "Dreampot",
+                      "id": 15
+                    },
+                    {
+                      "color": "#f9f6f0",
+                      "name": "Frosting",
+                      "id": 16
+                    },
+                    {
+                      "color": "#ae6c5b",
+                      "name": "Taupe",
+                      "id": 17
+                    },
+                    {
+                      "color": "#e2397a",
+                      "name": "Pink Pigeon",
+                      "id": 18
+                    },
+                    {
+                      "color": "#945246",
+                      "name": "Whirl",
+                      "id": 19
+                    },
+                    {
+                      "color": "#d7523d",
+                      "name": "So Chaud",
+                      "id": 20
+                    },
+                    {
+                      "color": "#8a2c24",
+                      "name": "Studded Kiss",
+                      "id": 21
+                    },
+                    {
+                      "color": "#e34493",
+                      "name": "Candy Yum-Yum",
+                      "id": 22
+                    },
+                    {
+                      "color": "#d27a66",
+                      "name": "Velvet Teddy",
+                      "id": 23
+                    },
+                    {
+                      "color": "#b483c2",
+                      "name": "4Eva",
+                      "id": 24
+                    },
+                    {
+                      "color": "#9B381E",
+                      "name": "Marrakesh 棕红脏橘",
+                      "id": 25
+                    },
+                    {
+                      "color": "#e8181d",
+                      "name": "Red Rock",
+                      "id": 26
+                    },
+                    {
+                      "color": "#ecc3c8",
+                      "name": "Lazy Lullaby",
+                      "id": 27
+                    },
+                    {
+                      "color": "#c48075",
+                      "name": "Kinda Sexy",
+                      "id": 28
+                    },
+                    {
+                      "color": "#b3181d",
+                      "name": " Russian Red 气质复古红",
+                      "id": 29
+                    },
+                    {
+                      "color": "#c35965",
+                      "name": "Mehr",
+                      "id": 30
+                    },
+                    {
+                      "color": "#d09191",
+                      "name": "Really Me",
+                      "id": 31
+                    },
+                    {
+                      "color": "#573e4e",
+                      "name": "Smoked Purple",
+                      "id": 32
+                    },
+                    {
+                      "color": "#671b25",
+                      "name": " Diva 姨妈色",
+                      "id": 33
+                    },
+                    {
+                      "color": "#905245",
+                      "name": "Persistence",
+                      "id": 34
+                    },
+                    {
+                      "color": "#ff1986",
+                      "name": "Breathing Fire",
+                      "id": 35
+                    },
+                    {
+                      "color": "#876564",
+                      "name": "Deep Rooted",
+                      "id": 36
+                    },
+                    {
+                      "color": "#c67a8a",
+                      "name": "Pink Plaid",
+                      "id": 37
+                    },
+                    {
+                      "color": "#b27d6d",
+                      "name": "Honeylove",
+                      "id": 38
+                    },
+                    {
+                      "color": "#83364B",
+                      "name": "Rocker",
+                      "id": 39
+                    },
+                    {
+                      "color": "#a71e0b",
+                      "name": "Chili 小辣椒",
+                      "id": 40
+                    },
+                    {
+                      "color": "#ed2600",
+                      "name": "Lady Danger 血橙色",
+                      "id": 41
+                    },
+                    {
+                      "color": "#ae7558",
+                      "name": "Naturally Transformed",
+                      "id": 42
+                    },
+                    {
+                      "color": "#3B3154",
+                      "name": "Punk Couture",
+                      "id": 43
+                    },
+                    {
+                      "color": "#8e233c",
+                      "name": "D for Danger",
+                      "id": 44
+                    },
+                    {
+                      "color": "#C17D70",
+                      "name": "Bronx",
+                      "id": 45
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可显色丰润唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#d78080",
+                      "name": "Vegas Volt 粉橘色",
+                      "id": 0
+                    },
+                    {
+                      "color": "#df3a5f",
+                      "name": "Fusion Pink",
+                      "id": 1
+                    },
+                    {
+                      "color": "#c06b6f",
+                      "name": "Brick-O-La 玫瑰豆沙色",
+                      "id": 2
+                    },
+                    {
+                      "color": "#b48081",
+                      "name": "Fast Play",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c49084",
+                      "name": "Half 'n Half",
+                      "id": 4
+                    },
+                    {
+                      "color": "#dc3d88",
+                      "name": "Full Fuschia",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d83a9f",
+                      "name": "Show Orchid ",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ea5836",
+                      "name": "Neon Orange",
+                      "id": 7
+                    },
+                    {
+                      "color": "#dc4f73",
+                      "name": "Impassioned",
+                      "id": 8
+                    },
+                    {
+                      "color": "#bc617d",
+                      "name": "Craving",
+                      "id": 9
+                    },
+                    {
+                      "color": "#81368f",
+                      "name": "Violetta",
+                      "id": 10
+                    },
+                    {
+                      "color": "#bc617d",
+                      "name": "Craving",
+                      "id": 11
+                    },
+                    {
+                      "color": "#713c4d",
+                      "name": "Dark Side",
+                      "id": 12
+                    },
+                    {
+                      "color": "#a24c4f",
+                      "name": "Smoked Almond",
+                      "id": 13
+                    },
+                    {
+                      "color": "#993f3f",
+                      "name": "Dubonnet 气质牛血色",
+                      "id": 14
+                    },
+                    {
+                      "color": "#d87a92",
+                      "name": "Chatterbox",
+                      "id": 15
+                    },
+                    {
+                      "color": "#b8787a",
+                      "name": "Cosmo",
+                      "id": 16
+                    },
+                    {
+                      "color": "#cca099",
+                      "name": "Blankety",
+                      "id": 17
+                    },
+                    {
+                      "color": "#e887c6",
+                      "name": "Saint Germain",
+                      "id": 18
+                    },
+                    {
+                      "color": "#b8787a",
+                      "name": "Cosmo",
+                      "id": 19
+                    },
+                    {
+                      "color": "#c9548a",
+                      "name": "Girl About Town",
+                      "id": 20
+                    },
+                    {
+                      "color": "#ec735e",
+                      "name": "Morange 明亮橙红色",
+                      "id": 21
+                    },
+                    {
+                      "color": "#ad629e",
+                      "name": "Up The Amp",
+                      "id": 22
+                    },
+                    {
+                      "color": "#ff9755",
+                      "name": "Nifty Neon",
+                      "id": 23
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可水样丰润唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#753633",
+                      "name": "Spice It Up!",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d2547a",
+                      "name": "Lustering",
+                      "id": 1
+                    },
+                    {
+                      "color": "#b07b76",
+                      "name": "Midimauve",
+                      "id": 2
+                    },
+                    {
+                      "color": "#c76b68",
+                      "name": "See Sheer 水漾西柚色",
+                      "id": 3
+                    },
+                    {
+                      "color": "#f3ab6a",
+                      "name": "Highlights",
+                      "id": 4
+                    },
+                    {
+                      "color": "#cc9393",
+                      "name": "Patisserie",
+                      "id": 5
+                    },
+                    {
+                      "color": "#c99797",
+                      "name": "Politely Pink",
+                      "id": 6
+                    },
+                    {
+                      "color": "#c97885",
+                      "name": "Giddy",
+                      "id": 7
+                    },
+                    {
+                      "color": "#b17581",
+                      "name": "Syrup",
+                      "id": 8
+                    },
+                    {
+                      "color": "#9f626c",
+                      "name": "Capricious",
+                      "id": 9
+                    },
+                    {
+                      "color": "#c75e93",
+                      "name": "Milan Mode",
+                      "id": 10
+                    },
+                    {
+                      "color": "#b0607d",
+                      "name": "Plumful",
+                      "id": 11
+                    },
+                    {
+                      "color": "#aa5e83",
+                      "name": "Sweetie",
+                      "id": 12
+                    },
+                    {
+                      "color": "#972e2e",
+                      "name": "Cockney 斩男水红色",
+                      "id": 13
+                    },
+                    {
+                      "color": "#b23532",
+                      "name": "Lady Bug 元气番茄红",
+                      "id": 14
+                    },
+                    {
+                      "color": "#996353",
+                      "name": "Touch",
+                      "id": 15
+                    },
+                    {
+                      "color": "#b88778",
+                      "name": "Jubilee",
+                      "id": 16
+                    },
+                    {
+                      "color": "#b4847d",
+                      "name": "Hug Me",
+                      "id": 17
+                    },
+                    {
+                      "color": "#aa8572",
+                      "name": "Fresh Brew",
+                      "id": 18
+                    },
+                    {
+                      "color": "#FA9696",
+                      "name": "Flamingo",
+                      "id": 19
+                    },
+                    {
+                      "color": "#d5afb2",
+                      "name": "Pretty Please",
+                      "id": 20
+                    },
+                    {
+                      "color": "#fec74f",
+                      "name": "Gold XIXI",
+                      "id": 21
+                    },
+                    {
+                      "color": "#e58680",
+                      "name": "Razzledazzler",
+                      "id": 22
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可润采诱光唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#a8676d",
+                      "name": "Crème In Your Coffee",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d39697",
+                      "name": "Crème Cup",
+                      "id": 1
+                    },
+                    {
+                      "color": "#cf6067",
+                      "name": "On Hold",
+                      "id": 2
+                    },
+                    {
+                      "color": "#d37782",
+                      "name": "Fanfare",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c97d75",
+                      "name": "Shanghai Spice",
+                      "id": 4
+                    },
+                    {
+                      "color": "#f16f9f",
+                      "name": "Speed Dial",
+                      "id": 5
+                    },
+                    {
+                      "color": "#de9787",
+                      "name": "Shy Girl",
+                      "id": 6
+                    },
+                    {
+                      "color": "#dfb3a6",
+                      "name": "Crème d'Nude",
+                      "id": 7
+                    },
+                    {
+                      "color": "#803450",
+                      "name": "Party Line",
+                      "id": 8
+                    },
+                    {
+                      "color": "#ba3a6d",
+                      "name": "Lickable",
+                      "id": 9
+                    },
+                    {
+                      "color": "#e4c1e2",
+                      "name": "Love & Cherished",
+                      "id": 10
+                    },
+                    {
+                      "color": "#a51629",
+                      "name": "Brave Red 水润樱桃红",
+                      "id": 11
+                    },
+                    {
+                      "color": "#5f363f",
+                      "name": "Hang-up",
+                      "id": 12
+                    },
+                    {
+                      "color": "#e97d6e",
+                      "name": "Nippon",
+                      "id": 13
+                    },
+                    {
+                      "color": "#c2898a",
+                      "name": "Modesty",
+                      "id": 14
+                    },
+                    {
+                      "color": "#c7838b",
+                      "name": "Peach Blossom",
+                      "id": 15
+                    },
+                    {
+                      "color": "#ff6a97",
+                      "name": "Pink Pearl Pop",
+                      "id": 16
+                    },
+                    {
+                      "color": "#e9616f",
+                      "name": "Little Buddha",
+                      "id": 17
+                    },
+                    {
+                      "color": "#c16f8c",
+                      "name": "Hot Gossip",
+                      "id": 18
+                    },
+                    {
+                      "color": "#e32929",
+                      "name": "Sweet Sakura 斩男草莓红",
+                      "id": 19
+                    },
+                    {
+                      "color": "#d89688",
+                      "name": "Pure Zen",
+                      "id": 20
+                    },
+                    {
+                      "color": "#f0525c",
+                      "name": "Pretty Boy",
+                      "id": 21
+                    },
+                    {
+                      "color": "#f28571",
+                      "name": "Koi Coral",
+                      "id": 22
+                    },
+                    {
+                      "color": "#eb666d",
+                      "name": "Crosswires",
+                      "id": 23
+                    },
+                    {
+                      "color": "#f88d80",
+                      "name": "Ravishing",
+                      "id": 24
+                    },
+                    {
+                      "color": "#f2668e",
+                      "name": "Star Magnolia",
+                      "id": 25
+                    },
+                    {
+                      "color": "#973335",
+                      "name": "Dare You 细闪红宝石",
+                      "id": 26
+                    },
+                    {
+                      "color": "#e85f82",
+                      "name": "Speak Louder",
+                      "id": 27
+                    },
+                    {
+                      "color": "#f2808c",
+                      "name": "Sunny Seoul",
+                      "id": 28
+                    },
+                    {
+                      "color": "#e98484",
+                      "name": "Coral Bliss",
+                      "id": 29
+                    },
+                    {
+                      "color": "#ff713c",
+                      "name": "Saigon Summer",
+                      "id": 30
+                    },
+                    {
+                      "color": "#e04171",
+                      "name": "Pickled Plum",
+                      "id": 31
+                    },
+                    {
+                      "color": "#e94633",
+                      "name": "Dozen Carnations 锦鲤色",
+                      "id": 32
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可绒光丰盈唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#a65d57",
+                      "name": "Retro",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d197ab",
+                      "name": "Snob",
+                      "id": 1
+                    },
+                    {
+                      "color": "#dd6265",
+                      "name": "Twig",
+                      "id": 2
+                    },
+                    {
+                      "color": "#b87f84",
+                      "name": "Faux",
+                      "id": 3
+                    },
+                    {
+                      "color": "#9b6560",
+                      "name": "Verve",
+                      "id": 4
+                    },
+                    {
+                      "color": "#67433d",
+                      "name": "Film Noir",
+                      "id": 5
+                    },
+                    {
+                      "color": "#be9181",
+                      "name": "Cherish",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b76a7c",
+                      "name": "Amorous",
+                      "id": 7
+                    },
+                    {
+                      "color": "#c89c86",
+                      "name": "Peachstock",
+                      "id": 8
+                    },
+                    {
+                      "color": "#a9736a",
+                      "name": "Spirit",
+                      "id": 9
+                    },
+                    {
+                      "color": "#60393b",
+                      "name": "Media",
+                      "id": 10
+                    },
+                    {
+                      "color": "#cda39b",
+                      "name": "Fleshpot",
+                      "id": 11
+                    },
+                    {
+                      "color": "#865641",
+                      "name": "Photo",
+                      "id": 12
+                    },
+                    {
+                      "color": "#8f4f47",
+                      "name": "Paramount",
+                      "id": 13
+                    },
+                    {
+                      "color": "#ca6d91",
+                      "name": "Pink Nouveau",
+                      "id": 14
+                    },
+                    {
+                      "color": "#9d595f",
+                      "name": "Del Rio",
+                      "id": 15
+                    },
+                    {
+                      "color": "#9e3957",
+                      "name": "Captive",
+                      "id": 16
+                    },
+                    {
+                      "color": "#c28b90",
+                      "name": "Brave",
+                      "id": 17
+                    },
+                    {
+                      "color": "#d2a393",
+                      "name": "Myth",
+                      "id": 18
+                    },
+                    {
+                      "color": "#b15641",
+                      "name": "Mocha 暖暖奶茶色",
+                      "id": 19
+                    },
+                    {
+                      "color": "#bf7665",
+                      "name": "Shrimpton",
+                      "id": 20
+                    },
+                    {
+                      "color": "#e48777",
+                      "name": "Sushi Kiss",
+                      "id": 21
+                    },
+                    {
+                      "color": "#721e4b",
+                      "name": "Rebel",
+                      "id": 22
+                    },
+                    {
+                      "color": "#5e4660",
+                      "name": "Cyber",
+                      "id": 23
+                    },
+                    {
+                      "color": "#b62330",
+                      "name": "MAC Red",
+                      "id": 24
+                    },
+                    {
+                      "color": "#b4b7ed",
+                      "name": "Dew",
+                      "id": 25
+                    }
+                  ]
+                },
+                {
+                  "name": "魅可闪亮星泽唇膏",
+                  "price": "￥175",
+                  "lipsticks": [
+                    {
+                      "color": "#903a59",
+                      "name": "New York Apple",
+                      "id": 0
+                    },
+                    {
+                      "color": "#F16974",
+                      "name": " Skew",
+                      "id": 1
+                    },
+                    {
+                      "color": "#aa5b51",
+                      "name": " Fresh Moroccan",
+                      "id": 2
+                    },
+                    {
+                      "color": "#e7c7af",
+                      "name": " Gel",
+                      "id": 3
+                    },
+                    {
+                      "color": "#aa5b51",
+                      "name": " Fresh Moroccan",
+                      "id": 4
+                    },
+                    {
+                      "color": "#8C6560",
+                      "name": " Icon",
+                      "id": 5
+                    },
+                    {
+                      "color": "#b07d69",
+                      "name": " \"O\"",
+                      "id": 6
+                    },
+                    {
+                      "color": "#cb969c",
+                      "name": "Fabby",
+                      "id": 7
+                    },
+                    {
+                      "color": "#c48950",
+                      "name": " Bronze Shimmer",
+                      "id": 8
+                    },
+                    {
+                      "color": "#9F5055",
+                      "name": "Spanish Fly",
+                      "id": 9
+                    },
+                    {
+                      "color": "#915476",
+                      "name": "Odyssey",
+                      "id": 10
+                    },
+                    {
+                      "color": "#cc7c92",
+                      "name": "Bombshell",
+                      "id": 11
+                    },
+                    {
+                      "color": "#ba8096",
+                      "name": "Creme de la Femme",
+                      "id": 12
+                    },
+                    {
+                      "color": "#ad7481",
+                      "name": "Plum Dandy",
+                      "id": 13
+                    },
+                    {
+                      "color": "#d9a1a7",
+                      "name": "Angel",
+                      "id": 14
+                    },
+                    {
+                      "color": "#dc7b7d",
+                      "name": "Costa Chic",
+                      "id": 15
+                    },
+                    {
+                      "color": "#cc5a3b",
+                      "name": "CB 96 人鱼姬色",
+                      "id": 16
+                    },
+                    {
+                      "color": "#7d4fac",
+                      "name": "Model Behaviour",
+                      "id": 17
+                    },
+                    {
+                      "color": "#6e5e70",
+                      "name": " On and On",
+                      "id": 18
+                    },
+                    {
+                      "color": "#b6aa8a",
+                      "name": "No Interruptions",
+                      "id": 19
+                    },
+                    {
+                      "color": "#f4c58e",
+                      "name": "Spoiled Fabulous",
+                      "id": 20
+                    },
+                    {
+                      "color": "#a1e7da",
+                      "name": "Soft Hint",
+                      "id": 21
+                    },
+                    {
+                      "color": "#2c5aa2",
+                      "name": "Designer Blue",
+                      "id": 22
+                    },
+                    {
+                      "color": "#fd428b",
+                      "name": "Pink, You Think?",
+                      "id": 23
+                    },
+                    {
+                      "color": "#cdc449",
+                      "name": "Wild Extract",
+                      "id": 24
+                    },
+                    {
+                      "color": "#f1afd9",
+                      "name": "Pick Me, Pick Me!",
+                      "id": 25
+                    },
+                    {
+                      "color": "#dcdcdc",
+                      "name": "Time To Shine",
+                      "id": 26
+                    }
+                  ]
+                },
+                {
+                  "name": "全新魅可挚爱柔缎唇膏",
+                  "price": "￥180",
+                  "lipsticks": [
+                    {
+                      "color": "#850d00",
+                      "name": "E For Effortless",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d36249",
+                      "name": "What I Say Goes",
+                      "id": 1
+                    },
+                    {
+                      "color": "#da3517",
+                      "name": "Shamelessly Vain",
+                      "id": 2
+                    },
+                    {
+                      "color": "#500919",
+                      "name": "La Femme",
+                      "id": 3
+                    },
+                    {
+                      "color": "#a54254",
+                      "name": "As If I Care",
+                      "id": 4
+                    },
+                    {
+                      "color": "#ff717a",
+                      "name": "Vanity Bonfire",
+                      "id": 5
+                    },
+                    {
+                      "color": "#fe2f0d",
+                      "name": "You Do You",
+                      "id": 6
+                    },
+                    {
+                      "color": "#945951",
+                      "name": "Coffee & Cigs",
+                      "id": 7
+                    },
+                    {
+                      "color": "#7d3133",
+                      "name": "Bated Breath",
+                      "id": 8
+                    },
+                    {
+                      "color": "#d672ba",
+                      "name": "Let Them Eat Cake!",
+                      "id": 9
+                    },
+                    {
+                      "color": "#8f2c19",
+                      "name": "Marrakesh Me Later",
+                      "id": 10
+                    },
+                    {
+                      "color": "#c53652",
+                      "name": "You're So Vain",
+                      "id": 11
+                    },
+                    {
+                      "color": "#850d00",
+                      "name": "Maison Rouge",
+                      "id": 12
+                    },
+                    {
+                      "color": "#b50327",
+                      "name": "Give Me Fever",
+                      "id": 13
+                    },
+                    {
+                      "color": "#c57b78",
+                      "name": "Laissez-Faire",
+                      "id": 14
+                    },
+                    {
+                      "color": "#a33621",
+                      "name": "Make Me Care",
+                      "id": 15
+                    },
+                    {
+                      "color": "#a43019",
+                      "name": "Hot As Chili",
+                      "id": 16
+                    },
+                    {
+                      "color": "#d2413c",
+                      "name": "All Me, Baby",
+                      "id": 17
+                    },
+                    {
+                      "color": "#9d3453",
+                      "name": "Mon Coeur",
+                      "id": 18
+                    },
+                    {
+                      "color": "#914957",
+                      "name": "Killing Me Softly",
+                      "id": 19
+                    },
+                    {
+                      "color": "#b90141",
+                      "name": "Nine Lives",
+                      "id": 20
+                    },
+                    {
+                      "color": "#842359",
+                      "name": "Joie De Vivre",
+                      "id": 21
+                    },
+                    {
+                      "color": "#c44e44",
+                      "name": "Mom, I Am A Rich Man",
+                      "id": 22
+                    },
+                    {
+                      "color": "#c94725",
+                      "name": "Breadwinner",
+                      "id": 23
+                    },
+                    {
+                      "color": "#fb8672",
+                      "name": "French Silk",
+                      "id": 24
+                    },
+                    {
+                      "color": "#de6c6b",
+                      "name": "Under The Covers",
+                      "id": 25
+                    },
+                    {
+                      "color": "#e62f45",
+                      "name": "My Little Secret",
+                      "id": 26
+                    },
+                    {
+                      "color": "#854039",
+                      "name": "DGAF",
+                      "id": 27
+                    },
+                    {
+                      "color": "#d06c6a",
+                      "name": "Très Blasé",
+                      "id": 28
+                    },
+                    {
+                      "color": "#c17a8a",
+                      "name": "Pure Nonchalance",
+                      "id": 29
+                    },
+                    {
+                      "color": "#b35867",
+                      "name": "Hey, Frenchie!",
+                      "id": 30
+                    },
+                    {
+                      "color": "#d47676",
+                      "name": "Daddy's Girl",
+                      "id": 31
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "YSL圣罗兰",
+              "series": [
+                {
+                  "name": "圣罗兰纯口红",
+                  "price": "￥335",
+                  "lipsticks": [
+                    {
+                      "color": "#c6171f",
+                      "name": "N° 1966无法复刻的红棕｜NEW",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b5152f",
+                      "name": "N°01 正红色｜HOT",
+                      "id": 1
+                    },
+                    {
+                      "color": "#bc1538",
+                      "name": "N°21 复古红｜NEW",
+                      "id": 2
+                    },
+                    {
+                      "color": "#a80f11",
+                      "name": "N°83 烂番茄｜HOT",
+                      "id": 3
+                    },
+                    {
+                      "color": "#b22820",
+                      "name": "N°153 枫糖棕｜NEW",
+                      "id": 4
+                    },
+                    {
+                      "color": "#b23a36",
+                      "name": "N°157 赤豆沙｜NEW",
+                      "id": 5
+                    },
+                    {
+                      "color": "#c42323",
+                      "name": "N°154甜茶橘｜NEW",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b91b1c",
+                      "name": "N°13 正橘色｜HOT",
+                      "id": 7
+                    },
+                    {
+                      "color": "#C40031",
+                      "name": "N°93 牛血色",
+                      "id": 8
+                    },
+                    {
+                      "color": "#d21c06",
+                      "name": "N°103 橙红诡辩",
+                      "id": 9
+                    },
+                    {
+                      "color": "#b61817",
+                      "name": "N°104 辣椒红",
+                      "id": 10
+                    },
+                    {
+                      "color": "#912442",
+                      "name": "N°88 梅红色",
+                      "id": 11
+                    },
+                    {
+                      "color": "#9b5054",
+                      "name": "N°90 玫瑰茶棕",
+                      "id": 12
+                    },
+                    {
+                      "color": "#b2484f",
+                      "name": "N°92 蔷薇烟粉",
+                      "id": 13
+                    },
+                    {
+                      "color": "#af192a",
+                      "name": "N°91 橙红色",
+                      "id": 14
+                    },
+                    {
+                      "color": "#b52232",
+                      "name": "2021限定「方管」N°01 正红色丨NEW",
+                      "id": 15
+                    },
+                    {
+                      "color": "#eb574b",
+                      "name": "N°156裸杏仁｜NEW",
+                      "id": 16
+                    }
+                  ]
+                },
+                {
+                  "name": "圣罗兰细管柔光纯口红",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#c3492d",
+                      "name": "N°214 琥珀南瓜棕｜HOT",
+                      "id": 0
+                    },
+                    {
+                      "color": "#962825",
+                      "name": "N°202 粉晶红栗｜HOT ",
+                      "id": 1
+                    },
+                    {
+                      "color": "#c3492d",
+                      "name": "N°213 琥珀茶棕 ",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ad4f28",
+                      "name": "N°215 琥珀烤奶 ",
+                      "id": 3
+                    },
+                    {
+                      "color": "#cf6b69",
+                      "name": "N°207 透茶香槟｜HOT ",
+                      "id": 4
+                    },
+                    {
+                      "color": "#c66469",
+                      "name": "N°203 粉晶蜜桃 ",
+                      "id": 5
+                    },
+                    {
+                      "color": "#9f332f",
+                      "name": "N°204 粉晶车厘子 ",
+                      "id": 6
+                    },
+                    {
+                      "color": "#a04538",
+                      "name": "N°211 琥珀枫糖 ",
+                      "id": 7
+                    }
+                  ]
+                },
+                {
+                  "name": "圣罗兰细管纯口红",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#c6171f",
+                      "name": "N°1966 无法复刻的红棕｜NEW",
+                      "id": 0
+                    },
+                    {
+                      "color": "#9d2430",
+                      "name": "N°21 复古正红｜HOT",
+                      "id": 1
+                    },
+                    {
+                      "color": "#852719",
+                      "name": "N°32 焦糖栗棕｜NEW",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ad0e10",
+                      "name": "N°33 糖渍金桔｜NEW",
+                      "id": 3
+                    },
+                    {
+                      "color": "#9a0f0b",
+                      "name": "N°416 番茄红｜NEW",
+                      "id": 4
+                    },
+                    {
+                      "color": "#b71b1a",
+                      "name": "N°28高阶胡萝卜｜HOT ",
+                      "id": 5
+                    },
+                    {
+                      "color": "#b45659",
+                      "name": "N°30枣泥红棕｜HOT ",
+                      "id": 6
+                    },
+                    {
+                      "color": "#8e2d2d",
+                      "name": "N°23 橙红番茄｜HOT",
+                      "id": 7
+                    },
+                    {
+                      "color": "#a5252b",
+                      "name": "N°27 复古玫瑰砖红｜NEW ",
+                      "id": 8
+                    },
+                    {
+                      "color": "#9c262d",
+                      "name": "N°1 呛口辣椒",
+                      "id": 9
+                    },
+                    {
+                      "color": "#88332e",
+                      "name": "N°9 棕调酒红",
+                      "id": 10
+                    },
+                    {
+                      "color": "#bb3c32",
+                      "name": "N°10 元气蜜橘",
+                      "id": 11
+                    },
+                    {
+                      "color": "#b55358",
+                      "name": "N°12 干枯玫瑰",
+                      "id": 12
+                    },
+                    {
+                      "color": "#c24d61",
+                      "name": "N°7 樱花裸粉",
+                      "id": 13
+                    },
+                    {
+                      "color": "#793442",
+                      "name": "N°16 紫藤玫瑰",
+                      "id": 14
+                    },
+                    {
+                      "color": "#e23f87",
+                      "name": "N°19 蜜糖亮粉",
+                      "id": 15
+                    },
+                    {
+                      "color": "#a90705",
+                      "name": "N°20 草莓水红",
+                      "id": 16
+                    }
+                  ]
+                },
+                {
+                  "name": "圣罗兰莹亮纯魅唇膏",
+                  "price": "￥335",
+                  "lipsticks": [
+                    {
+                      "color": "#9c131c",
+                      "name": "N°80 血腥玛丽",
+                      "id": 0
+                    },
+                    {
+                      "color": "#ad0d29",
+                      "name": "N°83 红丝绒蛋糕（HOT）",
+                      "id": 1
+                    },
+                    {
+                      "color": "#bd0126",
+                      "name": "N°101草莓晶冻",
+                      "id": 2
+                    },
+                    {
+                      "color": "#572427",
+                      "name": "N°76  枣泥肉桂",
+                      "id": 3
+                    },
+                    {
+                      "color": "#de3443",
+                      "name": "N°12 红粉派对",
+                      "id": 4
+                    },
+                    {
+                      "color": "#c50e2d",
+                      "name": "N°45 西瓜水红色",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d50b0b",
+                      "name": "N°46西柚珊瑚(热卖)",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b40637",
+                      "name": "N°84 樱桃白兰地",
+                      "id": 7
+                    },
+                    {
+                      "color": "#ad0632",
+                      "name": "N°92 樱桃浆果（NEW）",
+                      "id": 8
+                    },
+                    {
+                      "color": "#c0272c",
+                      "name": "N°105 焦糖甜橙（NEW）",
+                      "id": 9
+                    },
+                    {
+                      "color": "#901f4a",
+                      "name": "N°106 树莓豆沙（NEW）",
+                      "id": 10
+                    },
+                    {
+                      "color": "#a6144a",
+                      "name": "N°107 半糖樱花（NEW）",
+                      "id": 11
+                    },
+                    {
+                      "color": "#b42130",
+                      "name": "N°108 冰桃乌龙（NEW）",
+                      "id": 12
+                    },
+                    {
+                      "color": "#af3b48",
+                      "name": "N°86 裸皮革粉棕",
+                      "id": 13
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "LANCOME兰蔻",
+              "series": [
+                {
+                  "name": "菁纯哑光唇膏",
+                  "price": "￥285",
+                  "lipsticks": [
+                    {
+                      "color": "#b64338",
+                      "name": "196 （哑光）朱砂橘",
+                      "id": 0
+                    },
+                    {
+                      "color": "#d63341",
+                      "name": "505 （哑光）朱砂红",
+                      "id": 1
+                    },
+                    {
+                      "color": "#aa3034",
+                      "name": "07 （丝缎）夜游",
+                      "id": 2
+                    },
+                    {
+                      "color": "#d11215",
+                      "name": "122 （丝亮）犹豫",
+                      "id": 3
+                    },
+                    {
+                      "color": "#c43a33",
+                      "name": "120 （丝缎）赤茶橘",
+                      "id": 4
+                    },
+                    {
+                      "color": "#90252c",
+                      "name": "290 （丝绒）诗",
+                      "id": 5
+                    },
+                    {
+                      "color": "#d73c21",
+                      "name": "134 （哑光）血橙红",
+                      "id": 6
+                    },
+                    {
+                      "color": "#ba1e2a",
+                      "name": "82 （哑光）复古酒红",
+                      "id": 7
+                    },
+                    {
+                      "color": "#bb0808",
+                      "name": "198 （丝绒）高跟鞋",
+                      "id": 8
+                    },
+                    {
+                      "color": "#a93e3f",
+                      "name": "180 （丝缎）烟熏玫瑰",
+                      "id": 9
+                    },
+                    {
+                      "color": "#ba0203",
+                      "name": "132 （丝缎）欢乐颂",
+                      "id": 10
+                    },
+                    {
+                      "color": "#a30425",
+                      "name": "378 （丝绒）兰蔻玫瑰",
+                      "id": 11
+                    },
+                    {
+                      "color": "#a90d2a",
+                      "name": "368 （丝缎）兰蔻玫瑰",
+                      "id": 12
+                    },
+                    {
+                      "color": "#d37681",
+                      "name": "365 （丝缎）蝴蝶夫人",
+                      "id": 13
+                    },
+                    {
+                      "color": "#d63341",
+                      "name": "505 （哑光）朱砂红",
+                      "id": 14
+                    }
+                  ]
+                },
+                {
+                  "name": "柔雾哑光唇膏",
+                  "price": "￥285",
+                  "lipsticks": [
+                    {
+                      "color": "#911d30",
+                      "name": "888 小野莓",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a4271d",
+                      "name": "196 朱砂橘",
+                      "id": 1
+                    },
+                    {
+                      "color": "#b14a41",
+                      "name": "274 温柔奶茶",
+                      "id": 2
+                    },
+                    {
+                      "color": "#94161a",
+                      "name": "525 娇艳樱桃",
+                      "id": 3
+                    },
+                    {
+                      "color": "#9e2834",
+                      "name": "155 温热红酒",
+                      "id": 4
+                    },
+                    {
+                      "color": "#a5381d",
+                      "name": "169 焦糖南瓜",
+                      "id": 5
+                    },
+                    {
+                      "color": "#8f3034",
+                      "name": "278 肉桂拿铁",
+                      "id": 6
+                    }
+                  ]
+                },
+                {
+                  "name": "菁纯小姐唇膏",
+                  "price": "￥285",
+                  "lipsticks": [
+                    {
+                      "color": "#9b141b",
+                      "name": "525 人间小樱桃",
+                      "id": 0
+                    },
+                    {
+                      "color": "#bc5751",
+                      "name": "274 奶茶色",
+                      "id": 1
+                    },
+                    {
+                      "color": "#be2805",
+                      "name": "196 爆款色",
+                      "id": 2
+                    },
+                    {
+                      "color": "#ab363f",
+                      "name": "156 多汁石榴",
+                      "id": 3
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "TOM FORD",
+              "series": [
+                {
+                  "name": "黑金黑管",
+                  "price": "￥390",
+                  "lipsticks": [
+                    {
+                      "color": "#ef503a",
+                      "name": "15 WILD GINGER",
+                      "id": 0
+                    },
+                    {
+                      "color": "#b9372a",
+                      "name": "16 SCARLET ROUGE（亮光）",
+                      "id": 1
+                    },
+                    {
+                      "color": "#ed5349",
+                      "name": "09 TRUE CORAL",
+                      "id": 2
+                    },
+                    {
+                      "color": "#be2b35",
+                      "name": "10 CHERRY LUSH",
+                      "id": 3
+                    },
+                    {
+                      "color": "#813535",
+                      "name": "80 IMPASSIONED（亮光）",
+                      "id": 4
+                    },
+                    {
+                      "color": "#8c3432",
+                      "name": "08 VELVET CHERRY",
+                      "id": 5
+                    },
+                    {
+                      "color": "#813535",
+                      "name": "80 IMPASSIONED（哑光）",
+                      "id": 6
+                    },
+                    {
+                      "color": "#b9372a",
+                      "name": "16 SCARLET ROUGE（哑光）",
+                      "id": 7
+                    }
+                  ]
+                },
+                {
+                  "name": "限量白管",
+                  "price": "￥419",
+                  "lipsticks": [
+                    {
+                      "color": "#7e323c",
+                      "name": "01 PURPLE NOON",
+                      "id": 0
+                    },
+                    {
+                      "color": "#8a4c41",
+                      "name": "02 TEMPTATION WAITS",
+                      "id": 1
+                    },
+                    {
+                      "color": "#eb4d44",
+                      "name": "03 LE MEPRIS",
+                      "id": 2
+                    },
+                    {
+                      "color": "#b2142b",
+                      "name": "04 APHRODITE",
+                      "id": 3
+                    },
+                    {
+                      "color": "#df5c40",
+                      "name": "05 SOLAR AFFAIR",
+                      "id": 4
+                    },
+                    {
+                      "color": "#cb8a76",
+                      "name": "06 REVOLVE AROUND ME",
+                      "id": 5
+                    },
+                    {
+                      "color": "#e85a59",
+                      "name": "07 PARADISO",
+                      "id": 6
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "ARMANI",
+              "series": [
+                {
+                  "name": "全新 阿玛尼[红黑管]哑光唇膏",
+                  "price": "￥350",
+                  "lipsticks": [
+                    {
+                      "color": "#c33326",
+                      "name": "405 烤番茄红",
+                      "id": 0
+                    },
+                    {
+                      "color": "#a21c1d",
+                      "name": "406 皇后红",
+                      "id": 1
+                    },
+                    {
+                      "color": "#cf675e",
+                      "name": "105 干枯玫瑰",
+                      "id": 2
+                    },
+                    {
+                      "color": "#8b0d1a",
+                      "name": "400 经典阿玛尼红",
+                      "id": 3
+                    },
+                    {
+                      "color": "#901b27",
+                      "name": "201 浓郁浆果红",
+                      "id": 4
+                    },
+                    {
+                      "color": "#a2081c",
+                      "name": "403 开运红",
+                      "id": 5
+                    },
+                    {
+                      "color": "#e48979",
+                      "name": "104",
+                      "id": 6
+                    },
+                    {
+                      "color": "#be5454",
+                      "name": "102 奶茶色",
+                      "id": 7
+                    },
+                    {
+                      "color": "#5c231c",
+                      "name": "200",
+                      "id": 8
+                    },
+                    {
+                      "color": "#b12523",
+                      "name": "301 番茄色",
+                      "id": 9
+                    },
+                    {
+                      "color": "#c15b59",
+                      "name": "500 豆沙色",
+                      "id": 10
+                    },
+                    {
+                      "color": "#87383a",
+                      "name": "501",
+                      "id": 11
+                    },
+                    {
+                      "color": "#bb464d",
+                      "name": "503 烟熏豆沙色",
+                      "id": 12
+                    },
+                    {
+                      "color": "#bd0e56",
+                      "name": "506",
+                      "id": 13
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+          ,
+          selectLeftVal: {},
+          seRightLeftVal: {},
+          leftColor: null,
+          rightColor: null
+        }
+      },
+      methods: {
+        leftChange(val) {
+          const arr = this.brands.filter(v => {
+            return v.name === val[0]
+          })
+          this.selectLeftVal = arr[0].series.filter(v => v.name === val[1])[0]
+        },
+        rightChange(val) {
+          const arr = this.brands.filter(v => {
+            return v.name === val[0]
+          })
+          this.seRightLeftVal = arr[0].series.filter(v => v.name === val[1])[0]
+        },
+        leftClick(val) {
+          if (!val) return
+          this.leftColor = val.color
+        },
+        rightClick(val) {
+          if (!val) return
+          this.rightColor = val.color
+        }
+      }
+    })
+    </script>
+</body>
+
+</html>
